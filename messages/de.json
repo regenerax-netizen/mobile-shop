@@ -30,8 +30,9 @@
     "item3Title": "SIM-Karten & Entsperrung",
     "item3Desc": "SIM-Only-Angebote, Prepaid-SIMs und professionelle Handy-Entsperrung.",
     "learnMore": "Mehr erfahren",
-    "partnerTitle": "Unsere Partner",
-    "partnerDesc": "Offizielle Partner-Services direkt bei uns verfügbar"
+    "partnerLabel": "Unsere Kooperationen",
+    "partnerTitle": "Offizielle Partner",
+    "partnerDesc": "Diese Dienste sind direkt in unserem Shop erhältlich — kein Umweg nötig"
   },
   "products": {
     "subtitle": "Jetzt einkaufen",
@@ -80,7 +81,13 @@
     "sell": "Gerät verkaufen",
     "reviews": "Bewertungen",
     "hours": "Öffnungszeiten",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "home": "Startseite",
+    "navigation": "Navigation",
+    "ourServices": "Leistungen",
+    "contactUs": "Kontakt",
+    "defaultTagline": "Ihr zuverlässiger Handy-Spezialist",
+    "poweredBy": "Erstellt von MobileShop Agentur"
   },
   "shop": {
     "title": "Unser Shop",
@@ -105,6 +112,33 @@
     "price": "Preis",
     "noServices": "Noch keine Reparatur-Services verfügbar.",
     "contactUs": "Kontaktieren Sie uns für eine Reparatur"
+  },
+  "faq": {
+    "subtitle": "Häufig gestellte Fragen",
+    "title": "FAQ",
+    "description": "Antworten auf die häufigsten Fragen rund um unseren Handy-Shop.",
+    "repairQ": "Welche Reparaturen bieten Sie an?",
+    "repairA": "Wir reparieren alle gängigen Smartphone-Marken: Display-Austausch, Akku-Wechsel, Ladebuchsen, Wasserschäden, Kamera- und Lautsprecherprobleme. Bringen Sie Ihr Gerät einfach vorbei – wir machen einen kostenlosen Kostenvoranschlag.",
+    "warrantyQ": "Gibt es Garantie auf Reparaturen?",
+    "warrantyA": "Ja, auf jede Reparatur erhalten Sie eine Garantie. Die genaue Dauer hängt von der Art der Reparatur ab – in der Regel 3 bis 12 Monate.",
+    "buyUsedQ": "Kann ich gebrauchte Handys bei Ihnen kaufen?",
+    "buyUsedA": "Ja! Wir bieten geprüfte und generalüberholte Smartphones zu fairen Preisen an. Jedes Gerät wird gründlich getestet und kommt mit Garantie.",
+    "sellDeviceQ": "Wie kann ich mein altes Handy verkaufen?",
+    "sellDeviceA": "Bringen Sie Ihr Gerät einfach vorbei oder füllen Sie unser Verkaufsformular aus. Wir schätzen den Wert und machen Ihnen ein faires Angebot – Bargeld sofort.",
+    "repairTimeQ": "Wie lange dauert eine Reparatur?",
+    "repairTimeA": "Die meisten Reparaturen wie Display- oder Akkutausch sind innerhalb von 30–60 Minuten erledigt. Bei komplexeren Schäden informieren wir Sie vorab über die Dauer.",
+    "accessoriesQ": "Welches Zubehör haben Sie im Sortiment?",
+    "accessoriesA": "Hüllen, Panzerglas, Ladekabel, Kopfhörer, Powerbanks und vieles mehr – für alle gängigen Smartphone-Modelle.",
+    "simUnlockQ": "Bieten Sie SIM-Karten und Handy-Entsperrung an?",
+    "simUnlockA": "Ja, wir verkaufen Prepaid-SIM-Karten verschiedener Anbieter und bieten professionelle Handy-Entsperrung (Unlock) an.",
+    "paymentQ": "Welche Zahlungsmethoden akzeptieren Sie?",
+    "paymentA": "Wir akzeptieren Bargeld, EC-Karte und kontaktlose Zahlung. Bei größeren Beträgen ist auch Ratenzahlung möglich – sprechen Sie uns an.",
+    "appointmentQ": "Brauche ich einen Termin?",
+    "appointmentA": "Nein, Sie können jederzeit während unserer Öffnungszeiten vorbeikommen. Bei zeitkritischen Reparaturen empfehlen wir, kurz vorher anzurufen.",
+    "brandsQ": "Welche Marken reparieren und verkaufen Sie?",
+    "brandsA": "Wir arbeiten mit allen großen Marken: Apple, Samsung, Huawei, Xiaomi, OnePlus, Google Pixel und vielen mehr.",
+    "moreQuestions": "Noch Fragen? Schreiben Sie uns direkt!",
+    "contactWhatsApp": "Per WhatsApp fragen"
   },
   "sell": {
     "subtitle": "Gerät verkaufen",

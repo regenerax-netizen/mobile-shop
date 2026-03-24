@@ -17,6 +17,7 @@ export interface Shop {
   opening_hours: { day: string; hours: string }[];
   services: { title: string; icon: string }[];
   partner_services: string[];
+  partner_logos: Record<string, string>;
   active: boolean;
   created_at: string;
 }

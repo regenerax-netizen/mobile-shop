@@ -30,8 +30,9 @@
     "item3Title": "SIM Cards & Unlocking",
     "item3Desc": "SIM-only deals, pay-as-you-go SIMs, and professional phone unlocking.",
     "learnMore": "Learn more",
-    "partnerTitle": "Our Partners",
-    "partnerDesc": "Official partner services available directly at our shop"
+    "partnerLabel": "Our Partnerships",
+    "partnerTitle": "Official Partners",
+    "partnerDesc": "These services are available directly in our shop — no extra trip needed"
   },
   "products": {
     "subtitle": "Shop Now",
@@ -80,7 +81,13 @@
     "sell": "Sell Your Device",
     "reviews": "Reviews",
     "hours": "Hours",
-    "contact": "Contact"
+    "contact": "Contact",
+    "home": "Home",
+    "navigation": "Navigation",
+    "ourServices": "Our Services",
+    "contactUs": "Contact Us",
+    "defaultTagline": "Your trusted mobile phone specialist",
+    "poweredBy": "Built by MobileShop Agentur"
   },
   "shop": {
     "title": "Our Shop",
@@ -105,6 +112,33 @@
     "price": "Price",
     "noServices": "No repair services available yet.",
     "contactUs": "Contact Us for a Repair"
+  },
+  "faq": {
+    "subtitle": "Frequently Asked Questions",
+    "title": "FAQ",
+    "description": "Answers to the most common questions about our mobile shop.",
+    "repairQ": "What repairs do you offer?",
+    "repairA": "We repair all major smartphone brands: screen replacements, battery swaps, charging port fixes, water damage recovery, camera and speaker issues. Just bring your device in — we'll give you a free quote.",
+    "warrantyQ": "Do you offer a warranty on repairs?",
+    "warrantyA": "Yes, every repair comes with a warranty. The duration depends on the type of repair — typically 3 to 12 months.",
+    "buyUsedQ": "Can I buy used phones from you?",
+    "buyUsedA": "Absolutely! We offer tested and refurbished smartphones at fair prices. Every device is thoroughly inspected and comes with a warranty.",
+    "sellDeviceQ": "How can I sell my old phone?",
+    "sellDeviceA": "Simply bring your device in or fill out our sell form. We'll assess its value and make you a fair offer — cash on the spot.",
+    "repairTimeQ": "How long does a repair take?",
+    "repairTimeA": "Most repairs like screen or battery replacements take 30–60 minutes. For more complex issues, we'll let you know the estimated time upfront.",
+    "accessoriesQ": "What accessories do you stock?",
+    "accessoriesA": "Cases, tempered glass, charging cables, earphones, power banks and more — for all popular smartphone models.",
+    "simUnlockQ": "Do you offer SIM cards and phone unlocking?",
+    "simUnlockA": "Yes, we sell prepaid SIM cards from various providers and offer professional phone unlocking services.",
+    "paymentQ": "What payment methods do you accept?",
+    "paymentA": "We accept cash, debit cards and contactless payments. For larger amounts, instalment plans may be available — just ask.",
+    "appointmentQ": "Do I need an appointment?",
+    "appointmentA": "No, you can walk in anytime during our opening hours. For time-sensitive repairs, we recommend calling ahead.",
+    "brandsQ": "Which brands do you repair and sell?",
+    "brandsA": "We work with all major brands: Apple, Samsung, Huawei, Xiaomi, OnePlus, Google Pixel and many more.",
+    "moreQuestions": "Still have questions? Message us directly!",
+    "contactWhatsApp": "Ask on WhatsApp"
   },
   "sell": {
     "subtitle": "Sell Your Device",

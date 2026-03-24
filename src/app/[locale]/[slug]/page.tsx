@@ -1,15 +1,19 @@
+import dynamic from "next/dynamic";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/sections/Hero";
 import Services from "@/components/sections/Services";
-import FeaturedProducts from "@/components/sections/FeaturedProducts";
-import Reviews from "@/components/sections/Reviews";
-import OpeningHours from "@/components/sections/OpeningHours";
-import GoogleMap from "@/components/sections/GoogleMap";
-import Contact from "@/components/sections/Contact";
 import { getShopBySlug, getShopProducts, getShopReviews } from "@/lib/queries";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+
+// Lazy-load below-fold sections for faster initial paint
+const FeaturedProducts = dynamic(() => import("@/components/sections/FeaturedProducts"));
+const FAQ = dynamic(() => import("@/components/sections/FAQ"));
+const Reviews = dynamic(() => import("@/components/sections/Reviews"));
+const OpeningHours = dynamic(() => import("@/components/sections/OpeningHours"));
+const GoogleMap = dynamic(() => import("@/components/sections/GoogleMap"));
+const Contact = dynamic(() => import("@/components/sections/Contact"));
 
 export const revalidate = 60;
 
@@ -45,6 +49,7 @@ export default async function ShopHomePage({
       <Hero shop={shop} />
       <Services shop={shop} />
       <FeaturedProducts products={products} slug={params.slug} />
+      <FAQ shop={shop} />
       <Reviews reviews={reviews} />
       <OpeningHours shop={shop} />
       <GoogleMap shop={shop} />

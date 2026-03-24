@@ -14,7 +14,8 @@ export async function PUT(
   const body = await req.json();
   const {
     name, slug, tagline, phone, whatsapp, email, address,
-    google_maps_embed_url, logo_url, hero_image_url, accent_color,
+    google_maps_embed_url, logo_url, hero_image_url, hero_images,
+    accent_color, secondary_color, partner_services, partner_logos,
     opening_hours, services, active,
   } = body;
 
@@ -22,7 +23,8 @@ export async function PUT(
     .from("shops")
     .update({
       name, slug, tagline, phone, whatsapp, email, address,
-      google_maps_embed_url, logo_url, hero_image_url, accent_color,
+      google_maps_embed_url, logo_url, hero_image_url, hero_images,
+      accent_color, secondary_color, partner_services, partner_logos,
       opening_hours, services, active,
     })
     .eq("id", params.id)

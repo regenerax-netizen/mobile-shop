@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import type { Shop } from "@/types";
 
 export default function ShopsManager() {
@@ -183,9 +183,14 @@ function ShopForm({
   const [heroImageUrl, setHeroImageUrl] = useState(
     initial?.hero_image_url ?? "",
   );
-  const [heroImagesText, setHeroImagesText] = useState(
-    (initial?.hero_images ?? []).join("\n"),
+  // Hero images as array with upload support
+  const [heroImages, setHeroImages] = useState<string[]>(
+    initial?.hero_images ?? [],
   );
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [accentColor, setAccentColor] = useState(
     initial?.accent_color ?? "#f97316",
   );
@@ -195,7 +200,64 @@ function ShopForm({
   const [partnerServicesText, setPartnerServicesText] = useState(
     (initial?.partner_services ?? []).join(", "),
   );
+  const [partnerLogos, setPartnerLogos] = useState<Record<string, string>>(
+    initial?.partner_logos ?? {},
+  );
+  const [partnerLogoUploading, setPartnerLogoUploading] = useState<string | null>(null);
   const [active, setActive] = useState(initial?.active ?? true);
+
+  const handleImageFiles = async (files: FileList) => {
+    setUploadError("");
+    setUploading(true);
+    const newUrls: string[] = [];
+    for (const file of Array.from(files)) {
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("folder", "hero-images");
+      try {
+        const res = await fetch("/api/upload", { method: "POST", body: fd });
+        const json = await res.json();
+        if (res.ok && json.url) {
+          newUrls.push(json.url);
+        } else {
+          setUploadError(json.error ?? "Upload failed");
+        }
+      } catch {
+        setUploadError("Upload failed. Check your connection.");
+      }
+    }
+    setHeroImages((prev) => [...prev, ...newUrls]);
+    setUploading(false);
+  };
+
+  const removeHeroImage = (idx: number) => {
+    setHeroImages((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const handlePartnerLogoUpload = async (partnerName: string, file: File) => {
+    setPartnerLogoUploading(partnerName);
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("folder", "partner-logos");
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const json = await res.json();
+      if (res.ok && json.url) {
+        setPartnerLogos((prev) => ({ ...prev, [partnerName]: json.url }));
+      }
+    } catch {
+      // ignore
+    }
+    setPartnerLogoUploading(null);
+  };
+
+  const removePartnerLogo = (partnerName: string) => {
+    setPartnerLogos((prev) => {
+      const next = { ...prev };
+      delete next[partnerName];
+      return next;
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -209,17 +271,15 @@ function ShopForm({
       address,
       google_maps_embed_url: googleMapsEmbedUrl,
       logo_url: logoUrl,
-      hero_image_url: heroImageUrl,
-      hero_images: heroImagesText
-        .split("\n")
-        .map((s) => s.trim())
-        .filter(Boolean),
+      hero_image_url: heroImageUrl || heroImages[0] || "",
+      hero_images: heroImages,
       accent_color: accentColor,
       secondary_color: secondaryColor,
       partner_services: partnerServicesText
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean),
+      partner_logos: partnerLogos,
       opening_hours: initial?.opening_hours ?? [],
       services: initial?.services ?? [],
       active,
@@ -272,6 +332,7 @@ function ShopForm({
             type="text"
             value={tagline}
             onChange={(e) => setTagline(e.target.value)}
+            placeholder="z.B. Ihr Handy-Spezialist in Berlin"
             className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm"
           />
         </div>
@@ -345,7 +406,7 @@ function ShopForm({
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1">
-            Hero Image URL
+            Haupt-Bild URL (Fallback)
           </label>
           <input
             type="text"
@@ -354,18 +415,79 @@ function ShopForm({
             className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm"
           />
         </div>
+
+        {/* ── Hero Image Upload ── */}
         <div className="sm:col-span-2">
-          <label className="block text-xs font-medium text-gray-500 mb-1">
-            {t("heroImages")}
+          <label className="block text-xs font-medium text-gray-500 mb-2">
+            {t("heroImages")} <span className="text-gray-400 font-normal">(Vom Handy oder PC hochladen)</span>
           </label>
-          <textarea
-            value={heroImagesText}
-            onChange={(e) => setHeroImagesText(e.target.value)}
-            rows={4}
-            placeholder={"https://...\nhttps://..."}
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm resize-none"
+          {/* Image grid */}
+          {heroImages.length > 0 && (
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-3">
+              {heroImages.map((url, idx) => (
+                <div key={idx} className="relative group rounded-xl overflow-hidden aspect-video bg-gray-100">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={url}
+                    alt={`Hero ${idx + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeHeroImage(idx)}
+                    className="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow"
+                  >
+                    ×
+                  </button>
+                  {idx === 0 && (
+                    <span className="absolute bottom-1 left-1 text-[9px] bg-black/60 text-white px-1.5 py-0.5 rounded font-medium">
+                      1. Bild
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          {/* Upload button */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => e.target.files && handleImageFiles(e.target.files)}
           />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-orange-300 text-orange-500 hover:border-orange-400 hover:bg-orange-50 transition-all text-sm font-medium disabled:opacity-50"
+          >
+            {uploading ? (
+              <>
+                <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                </svg>
+                Wird hochgeladen…
+              </>
+            ) : (
+              <>
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                </svg>
+                Bilder hochladen (mehrere möglich)
+              </>
+            )}
+          </button>
+          {uploadError && (
+            <p className="mt-1.5 text-xs text-red-500">{uploadError}</p>
+          )}
+          <p className="mt-1.5 text-xs text-gray-400">
+            JPG, PNG, WebP · max. 10 MB · Mehrere Bilder gleichzeitig möglich
+          </p>
         </div>
+
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1">
             {t("accentColor")}
@@ -415,6 +537,57 @@ function ShopForm({
             placeholder="Lyca Mobile, Ortel Mobile, Lebara, MoneyGram"
             className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm"
           />
+          <p className="mt-1 text-xs text-gray-400">
+            Kommagetrennt eingeben — z.B. Lyca Mobile, Lebara, MoneyGram
+          </p>
+
+          {/* Partner Logo Uploads */}
+          {partnerServicesText.split(",").map((s) => s.trim()).filter(Boolean).length > 0 && (
+            <div className="mt-4 space-y-3">
+              <p className="text-xs font-medium text-gray-500">Partner-Logos hochladen (empfohlen: 200×80 px, PNG/SVG)</p>
+              {partnerServicesText.split(",").map((s) => s.trim()).filter(Boolean).map((name) => (
+                <div key={name} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                  {/* Logo preview or upload */}
+                  {partnerLogos[name] ? (
+                    <div className="relative w-24 h-12 rounded-lg overflow-hidden bg-white border border-gray-200 flex-shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={partnerLogos[name]} alt={name} className="w-full h-full object-contain p-1" />
+                      <button
+                        type="button"
+                        onClick={() => removePartnerLogo(name)}
+                        className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center shadow"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="flex-shrink-0 w-24 h-12 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition-all">
+                      {partnerLogoUploading === name ? (
+                        <svg className="animate-spin h-4 w-4 text-orange-400" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                        </svg>
+                      ) : (
+                        <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                        </svg>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) handlePartnerLogoUpload(name, f);
+                        }}
+                      />
+                    </label>
+                  )}
+                  <span className="text-sm font-medium text-gray-700">{name}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-3">
           <label className="block text-xs font-medium text-gray-500">

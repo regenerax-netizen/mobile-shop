@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import { phoneLink, whatsappLink } from "@/config";
 import type { Shop } from "@/types";
 
@@ -40,18 +41,27 @@ export default function Hero({ shop }: { shop: Shop }) {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background images with crossfade */}
+      {/* Background images with crossfade — optimised with next/image */}
       {images.map((img, i) => (
         <div
           key={i}
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0"
           style={{
-            backgroundImage: `url('${img}')`,
             opacity: i === current ? 1 : 0,
             transform: i === current ? "scale(1.05)" : "scale(1.1)",
             transition: "opacity 700ms ease-in-out, transform 6s ease-out",
           }}
-        />
+        >
+          <Image
+            src={img}
+            alt={`${shop.name} hero ${i + 1}`}
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority={i === 0}
+            quality={80}
+          />
+        </div>
       ))}
 
       {/* Overlays */}

@@ -6,39 +6,43 @@ import type { Shop } from "@/types";
 const icons: Record<string, React.ReactNode> = {
   wrench: (
     <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17l-5.46 5.46a2.12 2.12 0 01-3-3l5.46-5.46m2.83-2.83L21.68 4.9a1.5 1.5 0 00-2.12-2.12l-4.44 4.44m0 0L12.29 4.4a1.5 1.5 0 00-2.27.3L8.15 7.56a1.5 1.5 0 00.3 1.88l6.11 6.11a1.5 1.5 0 001.88.3l2.86-1.87a1.5 1.5 0 00.3-2.27l-2.83-2.83z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
     </svg>
   ),
   smartphone: (
     <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-      <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-      <line x1="12" y1="18" x2="12.01" y2="18" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 15.75h3" />
     </svg>
   ),
   headphones: (
     <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M3 18v-6a9 9 0 0118 0v6" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
     </svg>
   ),
   sim: (
     <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-      <rect x="4" y="2" width="16" height="20" rx="2" />
-      <path d="M8 2l4 4h4" />
-      <rect x="8" y="10" width="8" height="8" rx="1" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 3.75H6.912a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.25 2.25 0 00-.1.661V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859M12 3v8.25m0 0l-3-3m3 3l3-3" />
     </svg>
   ),
 };
 
-const partnerLogos: Record<string, { domain: string; color: string }> = {
-  "Lyca Mobile":   { domain: "lycamobile.de",    color: "#e30613" },
-  "Ortel Mobile":  { domain: "ortel.de",         color: "#00a650" },
-  "Lebara":        { domain: "lebara.de",         color: "#e5007d" },
-  "MoneyGram":     { domain: "moneygram.com",     color: "#f37021" },
-  "Western Union": { domain: "westernunion.com",  color: "#ffdd00" },
-  "Blau":          { domain: "blau.de",           color: "#0066cc" },
-  "Aldi Talk":     { domain: "alditalk.de",       color: "#00599c" },
-  "Congstar":      { domain: "congstar.de",       color: "#ff7300" },
+// Guaranteed brand colors — no external image fetching needed
+const partnerBrands: Record<string, { bg: string; text: string; accent: string }> = {
+  "Lyca Mobile":   { bg: "#E30613", text: "#fff",  accent: "#ff3344" },
+  "Ortel Mobile":  { bg: "#009540", text: "#fff",  accent: "#00b84d" },
+  "Lebara":        { bg: "#E5007D", text: "#fff",  accent: "#ff29a0" },
+  "MoneyGram":     { bg: "#F37021", text: "#fff",  accent: "#ff8c40" },
+  "Western Union": { bg: "#FFDD00", text: "#1a1a1a", accent: "#ffe740" },
+  "Blau":          { bg: "#0066CC", text: "#fff",  accent: "#1a7fe0" },
+  "Aldi Talk":     { bg: "#001F5B", text: "#fff",  accent: "#003080" },
+  "Congstar":      { bg: "#FF7300", text: "#fff",  accent: "#ff8f26" },
+};
+
+const serviceDescKeys: Record<string, string> = {
+  wrench: "item0Desc",
+  smartphone: "item1Desc",
+  headphones: "item2Desc",
+  sim: "item3Desc",
 };
 
 export default function Services({ shop }: { shop: Shop }) {
@@ -58,27 +62,44 @@ export default function Services({ shop }: { shop: Shop }) {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 stagger-children">
-          {shop.services.map((service, i) => (
+          {shop.services.map((service) => (
             <div
               key={service.icon}
-              className="group premium-card relative p-8 overflow-hidden"
+              className="group premium-card relative p-8 overflow-hidden cursor-default"
             >
+              {/* Top accent bar */}
               <div
-                className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl transition-opacity duration-500"
+                style={{
+                  background: `linear-gradient(90deg, var(--color-primary), var(--color-primary-light))`,
+                  opacity: 0,
+                }}
+              />
+              <div
+                className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl group-hover:opacity-100 opacity-0 transition-opacity duration-500"
                 style={{
                   background: `linear-gradient(90deg, var(--color-primary), var(--color-primary-light))`,
                 }}
               />
-              <div className="mb-6 inline-flex items-center justify-center w-14 h-14 rounded-2xl icon-box">
+              {/* Icon */}
+              <div
+                className="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-2xl transition-transform duration-300 group-hover:scale-110"
+                style={{ background: `rgba(var(--color-primary-rgb), 0.1)`, color: `var(--color-primary)` }}
+              >
                 {icons[service.icon] ?? icons.smartphone}
               </div>
+              {/* Title from shop data — works for any language */}
               <h3 className="text-lg font-bold text-gray-900 mb-3">
-                {t(`item${i}Title`)}
+                {service.title}
               </h3>
               <p className="text-sm text-gray-500 leading-relaxed">
-                {t(`item${i}Desc`)}
+                {t(serviceDescKeys[service.icon] ?? "item0Desc")}
               </p>
-              <div className="mt-5 flex items-center gap-1 text-sm font-semibold accent-text opacity-0 group-hover:opacity-100 transform translate-x-[-8px] group-hover:translate-x-0 transition-all duration-300">
+              {/* CTA arrow */}
+              <div
+                className="mt-6 flex items-center gap-1.5 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0"
+                style={{ color: `var(--color-primary)` }}
+              >
                 <span>{t("learnMore")}</span>
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -88,45 +109,77 @@ export default function Services({ shop }: { shop: Shop }) {
           ))}
         </div>
 
-        {/* Partner Services */}
+        {/* Partner Services — shows uploaded logos when available, fallback to brand tiles */}
         {hasPartners && (
-          <div className="mt-20">
-            <div className="text-center mb-10">
-              <h3 className="text-2xl font-bold text-gray-900">{t("partnerTitle")}</h3>
-              <p className="text-gray-500 mt-2">{t("partnerDesc")}</p>
+          <div className="mt-24">
+            <div className="text-center mb-12">
+              <span className="section-label">{t("partnerLabel")}</span>
+              <h3 className="text-3xl font-bold text-gray-900 mt-2">{t("partnerTitle")}</h3>
+              <p className="text-gray-500 mt-3 max-w-lg mx-auto">{t("partnerDesc")}</p>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4">
               {shop.partner_services.map((name) => {
-                const partner = partnerLogos[name];
+                const logoUrl = shop.partner_logos?.[name];
+                const brand = partnerBrands[name];
+                const bg = brand?.bg ?? "var(--color-primary)";
+                const textColor = brand?.text ?? "#fff";
+                const initial = name.charAt(0).toUpperCase();
                 return (
                   <div
                     key={name}
-                    className="premium-card px-6 py-5 flex flex-col items-center gap-3 min-w-[120px] hover:-translate-y-1 transition-transform"
+                    className="group relative overflow-hidden rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
+                    style={{ background: logoUrl ? "#fff" : bg, minWidth: 130 }}
                   >
-                    {partner ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={`https://logo.clearbit.com/${partner.domain}`}
-                        alt={name}
-                        className="h-10 w-auto max-w-[90px] object-contain"
-                        onError={(e) => {
-                          const el = e.currentTarget;
-                          el.style.display = "none";
-                          const fallback = el.nextElementSibling as HTMLElement | null;
-                          if (fallback) fallback.style.display = "flex";
-                        }}
-                      />
-                    ) : null}
-                    <div
-                      className="h-10 w-10 rounded-xl items-center justify-center text-white text-xs font-bold"
-                      style={{
-                        backgroundColor: partner?.color ?? "var(--color-primary)",
-                        display: partner ? "none" : "flex",
-                      }}
-                    >
-                      {name.slice(0, 2).toUpperCase()}
+                    {/* Shine overlay */}
+                    {!logoUrl && (
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent pointer-events-none" />
+                    )}
+                    <div className="relative px-6 py-5 flex flex-col items-center gap-2">
+                      {logoUrl ? (
+                        /* Uploaded logo */
+                        <>
+                          <div className="w-28 h-14 flex items-center justify-center">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={logoUrl}
+                              alt={name}
+                              className="max-w-full max-h-full object-contain"
+                            />
+                          </div>
+                          <span className="text-xs font-semibold text-gray-600 text-center leading-tight">
+                            {name}
+                          </span>
+                          <span
+                            className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
+                            style={{ background: "rgba(var(--color-primary-rgb), 0.1)", color: "var(--color-primary)" }}
+                          >
+                            Partner
+                          </span>
+                        </>
+                      ) : (
+                        /* Fallback: brand color tile */
+                        <>
+                          <div
+                            className="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-black shadow-inner"
+                            style={{ background: "rgba(255,255,255,0.2)", color: textColor }}
+                          >
+                            {initial}
+                          </div>
+                          <span
+                            className="text-sm font-bold text-center leading-tight"
+                            style={{ color: textColor }}
+                          >
+                            {name}
+                          </span>
+                          <span
+                            className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
+                            style={{ background: "rgba(255,255,255,0.25)", color: textColor }}
+                          >
+                            Partner
+                          </span>
+                        </>
+                      )}
                     </div>
-                    <span className="text-xs font-semibold text-gray-600 text-center whitespace-nowrap">{name}</span>
                   </div>
                 );
               })}
@@ -137,3 +190,4 @@ export default function Services({ shop }: { shop: Shop }) {
     </section>
   );
 }
+

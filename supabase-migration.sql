@@ -107,16 +107,39 @@ ON CONFLICT DO NOTHING;
 ALTER TABLE shops ADD COLUMN IF NOT EXISTS hero_images        JSONB DEFAULT '[]'::jsonb;
 ALTER TABLE shops ADD COLUMN IF NOT EXISTS secondary_color    TEXT DEFAULT '';
 ALTER TABLE shops ADD COLUMN IF NOT EXISTS partner_services   JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE shops ADD COLUMN IF NOT EXISTS partner_logos      JSONB DEFAULT '{}'::jsonb;
 
 -- Backfill sample shop
 UPDATE shops SET
-  hero_images = '["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1920&auto=format&fit=crop","https://images.unsplash.com/photo-1556656793-08538906a9f8?q=80&w=1920&auto=format&fit=crop","https://images.unsplash.com/photo-1565849904461-04a58ad377e0?q=80&w=1920&auto=format&fit=crop","https://images.unsplash.com/photo-1580910051074-3eb694886571?q=80&w=1920&auto=format&fit=crop","https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?q=80&w=1920&auto=format&fit=crop"]'::jsonb,
+  hero_images = '["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1920&auto=format&fit=crop","https://images.unsplash.com/photo-1556656793-08538906a9f8?q=80&w=1920&auto=format&fit=crop","https://images.unsplash.com/photo-1565849904461-04a58ad377e0?q=80&w=1920&auto=format&fit=crop","https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=1920&auto=format&fit=crop","https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?q=80&w=1920&auto=format&fit=crop"]'::jsonb,
   secondary_color = '#1e3a5f',
   partner_services = '["Lyca Mobile","Ortel Mobile","Lebara","MoneyGram"]'::jsonb
 WHERE slug = 'mobilehub';
 
--- Sample reviews
+-- Fix English tagline → German
+UPDATE shops SET tagline = 'Ihr zuverlässiger Handy-Spezialist vor Ort'
+WHERE slug = 'mobilehub' AND (tagline = 'Your Trusted Mobile Phone Specialists' OR tagline = '');
+
+-- Sample reviews (German)
 INSERT INTO reviews (shop_id, reviewer_name, review_text, rating) VALUES
-  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Sarah M.', 'Brilliant service! Had my screen replaced in under an hour. Prices are very fair and the staff are super friendly.', 5),
-  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'James K.', 'Bought a refurbished iPhone here — works like new. They even threw in a free case. Highly recommend!', 5),
-  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Priya D.', 'Best phone shop in town. Quick unlocking service and great advice on which phone to buy. Five stars!', 5);
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Sarah M.', 'Toller Service! Mein Display wurde in unter einer Stunde ausgetauscht. Faire Preise und super freundliches Personal.', 5),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Thomas K.', 'Habe hier ein generalüberholtes iPhone gekauft — funktioniert wie neu. Sehr zu empfehlen!', 5),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Priya D.', 'Bester Handyladen der Stadt. Schneller Entsperrservice und tolle Beratung beim Handykauf. Fünf Sterne!', 5)
+ON CONFLICT DO NOTHING;
+
+-- ─── 9. SUPABASE STORAGE — public bucket for shop hero images ───────────
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'shop-images',
+  'shop-images',
+  true,
+  10485760,
+  ARRAY['image/jpeg','image/jpg','image/png','image/webp','image/gif']
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- Allow public read of shop-images
+DROP POLICY IF EXISTS "Public read shop-images" ON storage.objects;
+CREATE POLICY "Public read shop-images" ON storage.objects
+  FOR SELECT USING (bucket_id = 'shop-images');
+
