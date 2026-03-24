@@ -54,6 +54,10 @@ CREATE INDEX IF NOT EXISTS idx_reviews_shop_id ON reviews(shop_id);
 ALTER TABLE shops   ENABLE ROW LEVEL SECURITY;
 ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 
+-- Drop first so this script is safe to re-run
+DROP POLICY IF EXISTS "Public read shops"   ON shops;
+DROP POLICY IF EXISTS "Public read reviews" ON reviews;
+
 CREATE POLICY "Public read shops"   ON shops   FOR SELECT USING (true);
 CREATE POLICY "Public read reviews" ON reviews FOR SELECT USING (true);
 
@@ -78,6 +82,26 @@ ON CONFLICT (slug) DO NOTHING;
 -- Link existing products and repairs to the sample shop
 UPDATE products SET shop_id = (SELECT id FROM shops WHERE slug = 'mobilehub') WHERE shop_id IS NULL;
 UPDATE repair_services SET shop_id = (SELECT id FROM shops WHERE slug = 'mobilehub') WHERE shop_id IS NULL;
+
+-- ─── 7b. SAMPLE PRODUCTS ────────────────────────────────
+INSERT INTO products (shop_id, name, price, category, description, image_url, active) VALUES
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'iPhone 15 Pro Max', 1299, 'phones', 'Das neueste Apple-Flaggschiff mit Titan-Design, A17 Pro Chip und 48 MP Kamera. USB-C, Action-Button, Titangehäuse — die beste iPhone-Generation.', 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800&q=80', true),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Samsung Galaxy S24 Ultra', 1199, 'phones', 'Samsungs Premium-Smartphone mit integriertem S Pen, 200 MP Kamera, Snapdragon 8 Gen 3 und brillantem AMOLED-Display.', 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800&q=80', true),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'iPhone 14 – Generalüberholt', 699, 'phones', 'Leistungsstarkes iPhone mit A15 Bionic, fortschrittlichem Dual-Kamera-System und ganztägiger Akkulaufzeit. Geprüfte Qualität, 12 Monate Garantie.', 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&q=80', true),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Samsung Galaxy A54', 349, 'phones', 'Samsungs beliebtes Mittelklasse-Smartphone mit AMOLED-Display, Triple-Kamera und wassergeschütztem Gehäuse. Perfekt für jeden Alltag.', 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80', true),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Apple AirPods Pro 2', 249, 'accessories', 'Premium In-Ear-Kopfhörer mit aktiver Geräuschunterdrückung, adaptiver Transparenz und personalisiertem 3D-Audio.', 'https://images.unsplash.com/photo-1588423771073-b8903fdes564?w=800&q=80', true),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Schutzglas & Hülle Bundle', 29, 'accessories', '2-teiliges Rundum-Schutzset: 9H Panzerglas + stoßfeste Silikonhülle. Verfügbar für alle gängigen Modelle. Perfekte Passform garantiert.', 'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=800&q=80', true)
+ON CONFLICT DO NOTHING;
+
+-- ─── 7c. SAMPLE REPAIRS ─────────────────────────────────
+INSERT INTO repair_services (shop_id, name, price, estimated_time, description, active) VALUES
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Display-Reparatur', 89, '30–60 Min', 'Professioneller Austausch von gebrochenen oder beschädigten Displays für alle gängigen Smartphone-Modelle. Original-Qualität garantiert.', true),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Akku-Austausch', 59, '20–40 Min', 'Neuer Akku für mehr Laufzeit. Wir verwenden hochwertige Ersatzakkus mit voller Kapazität und 6 Monate Garantie.', true),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Wasserschaden-Behandlung', 79, '2–24 Std', 'Spezialreinigung und Trocknung bei Wasserschäden. Schnelles Handeln erhöht die Erfolgschancen erheblich.', true),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Ladeanschluss-Reparatur', 69, '30–60 Min', 'Reparatur oder Austausch defekter Ladebuchsen (USB-C / Lightning). Wieder zuverlässig und schnell laden.', true),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Rückglas-Austausch', 99, '45–90 Min', 'Professioneller Austausch des rückseitigen Glases bei iPhone und Samsung Galaxy Modellen. Wie neu.', true),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Kamera-Reparatur', 89, '30–60 Min', 'Austausch defekter Front- oder Rückkameras. Scharfe Fotos und Videos wie am ersten Tag.', true)
+ON CONFLICT DO NOTHING;
 
 -- ─── 8. PHASE 9 — New columns for hero_images, secondary_color, partner_services
 ALTER TABLE shops ADD COLUMN IF NOT EXISTS hero_images        JSONB DEFAULT '[]'::jsonb;

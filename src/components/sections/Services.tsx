@@ -30,15 +30,15 @@ const icons: Record<string, React.ReactNode> = {
   ),
 };
 
-const partnerColors: Record<string, string> = {
-  "Lyca Mobile": "#e30613",
-  "Ortel Mobile": "#00a650",
-  "Lebara": "#e5007d",
-  "MoneyGram": "#f37021",
-  "Western Union": "#ffdd00",
-  "Blau": "#0066cc",
-  "Aldi Talk": "#00599c",
-  "Congstar": "#ff7300",
+const partnerLogos: Record<string, { domain: string; color: string }> = {
+  "Lyca Mobile":   { domain: "lycamobile.de",    color: "#e30613" },
+  "Ortel Mobile":  { domain: "ortel.de",         color: "#00a650" },
+  "Lebara":        { domain: "lebara.de",         color: "#e5007d" },
+  "MoneyGram":     { domain: "moneygram.com",     color: "#f37021" },
+  "Western Union": { domain: "westernunion.com",  color: "#ffdd00" },
+  "Blau":          { domain: "blau.de",           color: "#0066cc" },
+  "Aldi Talk":     { domain: "alditalk.de",       color: "#00599c" },
+  "Congstar":      { domain: "congstar.de",       color: "#ff7300" },
 };
 
 export default function Services({ shop }: { shop: Shop }) {
@@ -96,18 +96,40 @@ export default function Services({ shop }: { shop: Shop }) {
               <p className="text-gray-500 mt-2">{t("partnerDesc")}</p>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              {shop.partner_services.map((name) => (
-                <div
-                  key={name}
-                  className="premium-card px-6 py-4 flex items-center gap-3 hover:-translate-y-1 transition-transform"
-                >
+              {shop.partner_services.map((name) => {
+                const partner = partnerLogos[name];
+                return (
                   <div
-                    className="w-3 h-3 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: partnerColors[name] || "var(--color-primary)" }}
-                  />
-                  <span className="font-semibold text-gray-900 whitespace-nowrap">{name}</span>
-                </div>
-              ))}
+                    key={name}
+                    className="premium-card px-6 py-5 flex flex-col items-center gap-3 min-w-[120px] hover:-translate-y-1 transition-transform"
+                  >
+                    {partner ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={`https://logo.clearbit.com/${partner.domain}`}
+                        alt={name}
+                        className="h-10 w-auto max-w-[90px] object-contain"
+                        onError={(e) => {
+                          const el = e.currentTarget;
+                          el.style.display = "none";
+                          const fallback = el.nextElementSibling as HTMLElement | null;
+                          if (fallback) fallback.style.display = "flex";
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      className="h-10 w-10 rounded-xl items-center justify-center text-white text-xs font-bold"
+                      style={{
+                        backgroundColor: partner?.color ?? "var(--color-primary)",
+                        display: partner ? "none" : "flex",
+                      }}
+                    >
+                      {name.slice(0, 2).toUpperCase()}
+                    </div>
+                    <span className="text-xs font-semibold text-gray-600 text-center whitespace-nowrap">{name}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
