@@ -12,11 +12,16 @@ export async function PUT(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { shop_id, name, price, category, description, image_url, active } = body;
+  const { shop_id, reviewer_name, review_text, rating } = body;
 
   const { data, error } = await supabaseAdmin
-    .from("products")
-    .update({ shop_id, name, price: Number(price), category, description, image_url, active })
+    .from("reviews")
+    .update({
+      shop_id,
+      reviewer_name,
+      review_text,
+      rating: Number(rating),
+    })
     .eq("id", params.id)
     .select()
     .single();
@@ -35,7 +40,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { error } = await supabaseAdmin
-    .from("products")
+    .from("reviews")
     .delete()
     .eq("id", params.id);
 

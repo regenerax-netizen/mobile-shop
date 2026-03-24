@@ -2,23 +2,23 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useState, useCallback } from "react";
-import type { Product, Shop } from "@/types";
+import type { Review, Shop } from "@/types";
 
-export default function ProductsManager() {
+export default function ReviewsManager() {
   const t = useTranslations("admin");
-  const [products, setProducts] = useState<Product[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [shops, setShops] = useState<Shop[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState<Product | null>(null);
+  const [editing, setEditing] = useState<Review | null>(null);
   const [filterShopId, setFilterShopId] = useState<string>("all");
 
   const loadData = useCallback(async () => {
-    const [pRes, sRes] = await Promise.all([
-      fetch("/api/products"),
+    const [rvRes, sRes] = await Promise.all([
+      fetch("/api/reviews"),
       fetch("/api/shops"),
     ]);
-    if (pRes.ok) setProducts(await pRes.json());
+    if (rvRes.ok) setReviews(await rvRes.json());
     if (sRes.ok) setShops(await sRes.json());
     setLoading(false);
   }, []);
@@ -29,42 +29,42 @@ export default function ProductsManager() {
 
   const filtered =
     filterShopId === "all"
-      ? products
-      : products.filter((p) => p.shop_id === filterShopId);
+      ? reviews
+      : reviews.filter((r) => r.shop_id === filterShopId);
 
   const handleDelete = async (id: string) => {
     if (!confirm(t("confirmDelete"))) return;
-    const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
-    if (res.ok) setProducts((prev) => prev.filter((p) => p.id !== id));
+    const res = await fetch(`/api/reviews/${id}`, { method: "DELETE" });
+    if (res.ok) setReviews((prev) => prev.filter((r) => r.id !== id));
   };
 
-  const handleEdit = (product: Product) => {
-    setEditing(product);
+  const handleEdit = (review: Review) => {
+    setEditing(review);
     setShowForm(true);
   };
 
-  const handleSave = async (formData: Partial<Product>) => {
+  const handleSave = async (formData: Partial<Review>) => {
     if (editing) {
-      const res = await fetch(`/api/products/${editing.id}`, {
+      const res = await fetch(`/api/reviews/${editing.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       if (res.ok) {
         const updated = await res.json();
-        setProducts((prev) =>
-          prev.map((p) => (p.id === updated.id ? updated : p)),
+        setReviews((prev) =>
+          prev.map((r) => (r.id === updated.id ? updated : r)),
         );
       }
     } else {
-      const res = await fetch("/api/products", {
+      const res = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       if (res.ok) {
         const created = await res.json();
-        setProducts((prev) => [created, ...prev]);
+        setReviews((prev) => [created, ...prev]);
       }
     }
     setShowForm(false);
@@ -83,7 +83,7 @@ export default function ProductsManager() {
     <div>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <h2 className="text-2xl font-bold text-gray-900">
-          {t("productsSection")}
+          {t("reviewsSection")}
         </h2>
         <div className="flex items-center gap-3">
           <select
@@ -105,13 +105,13 @@ export default function ProductsManager() {
             }}
             className="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold shadow transition-transform hover:scale-105"
           >
-            + {t("addProduct")}
+            + {t("addReview")}
           </button>
         </div>
       </div>
 
       {showForm && (
-        <ProductForm
+        <ReviewForm
           initial={editing}
           shops={shops}
           onSave={handleSave}
@@ -127,58 +127,45 @@ export default function ProductsManager() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-gray-50 text-left text-gray-500 text-xs uppercase tracking-wider">
-                <th className="px-6 py-3">{t("image")}</th>
-                <th className="px-6 py-3">{t("name")}</th>
+                <th className="px-6 py-3">{t("reviewerName")}</th>
                 <th className="px-6 py-3">{t("shop")}</th>
-                <th className="px-6 py-3">{t("category")}</th>
-                <th className="px-6 py-3">{t("price")}</th>
+                <th className="px-6 py-3">{t("rating")}</th>
+                <th className="px-6 py-3">{t("reviewText")}</th>
                 <th className="px-6 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {filtered.map((p) => {
-                const shop = shops.find((s) => s.id === p.shop_id);
+              {filtered.map((r) => {
+                const shop = shops.find((s) => s.id === r.shop_id);
                 return (
                   <tr
-                    key={p.id}
+                    key={r.id}
                     className="hover:bg-gray-50 transition-colors"
                   >
-                    <td className="px-6 py-3">
-                      {p.image_url ? (
-                        <img
-                          src={p.image_url}
-                          alt={p.name}
-                          className="w-12 h-12 rounded-lg object-cover"
-                        />
-                      ) : (
-                        <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
-                          No img
-                        </div>
-                      )}
-                    </td>
                     <td className="px-6 py-3 font-medium text-gray-900">
-                      {p.name}
+                      {r.reviewer_name}
                     </td>
                     <td className="px-6 py-3 text-gray-500 text-xs">
                       {shop?.name ?? "—"}
                     </td>
                     <td className="px-6 py-3">
-                      <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                        {p.category}
+                      <span className="text-amber-500">
+                        {"★".repeat(r.rating)}
+                        {"☆".repeat(5 - r.rating)}
                       </span>
                     </td>
-                    <td className="px-6 py-3 font-semibold">
-                      €{p.price.toFixed(2)}
+                    <td className="px-6 py-3 text-gray-600 max-w-xs truncate">
+                      {r.review_text}
                     </td>
                     <td className="px-6 py-3 text-right space-x-2">
                       <button
-                        onClick={() => handleEdit(p)}
+                        onClick={() => handleEdit(r)}
                         className="text-blue-600 hover:text-blue-700 font-medium text-xs"
                       >
                         {t("edit")}
                       </button>
                       <button
-                        onClick={() => handleDelete(p.id)}
+                        onClick={() => handleDelete(r.id)}
                         className="text-red-600 hover:text-red-700 font-medium text-xs"
                       >
                         {t("delete")}
@@ -190,10 +177,10 @@ export default function ProductsManager() {
               {filtered.length === 0 && (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={5}
                     className="px-6 py-12 text-center text-gray-400"
                   >
-                    No products yet.
+                    No reviews yet.
                   </td>
                 </tr>
               )}
@@ -205,53 +192,33 @@ export default function ProductsManager() {
   );
 }
 
-/* ─── Product Form ─────────────────────────────────────── */
-function ProductForm({
+/* ─── Review Form ──────────────────────────────────────── */
+function ReviewForm({
   initial,
   shops,
   onSave,
   onCancel,
 }: {
-  initial: Product | null;
+  initial: Review | null;
   shops: Shop[];
-  onSave: (data: Partial<Product>) => void;
+  onSave: (data: Partial<Review>) => void;
   onCancel: () => void;
 }) {
   const t = useTranslations("admin");
   const [shopId, setShopId] = useState(initial?.shop_id ?? shops[0]?.id ?? "");
-  const [name, setName] = useState(initial?.name ?? "");
-  const [price, setPrice] = useState(initial?.price?.toString() ?? "");
-  const [category, setCategory] = useState<"phones" | "accessories">(
-    initial?.category ?? "phones",
+  const [reviewerName, setReviewerName] = useState(
+    initial?.reviewer_name ?? "",
   );
-  const [description, setDescription] = useState(initial?.description ?? "");
-  const [imageUrl, setImageUrl] = useState(initial?.image_url ?? "");
-  const [uploading, setUploading] = useState(false);
-
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await fetch("/api/upload", { method: "POST", body: fd });
-    if (res.ok) {
-      const data = await res.json();
-      setImageUrl(data.url);
-    }
-    setUploading(false);
-  };
+  const [reviewText, setReviewText] = useState(initial?.review_text ?? "");
+  const [rating, setRating] = useState(initial?.rating?.toString() ?? "5");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave({
       shop_id: shopId,
-      name,
-      price: Number(price),
-      category,
-      description,
-      image_url: imageUrl,
-      active: true,
+      reviewer_name: reviewerName,
+      review_text: reviewText,
+      rating: Number(rating),
     });
   };
 
@@ -280,73 +247,41 @@ function ProductForm({
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1">
-            {t("name")}
+            {t("reviewerName")}
           </label>
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={reviewerName}
+            onChange={(e) => setReviewerName(e.target.value)}
             required
             className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm"
           />
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1">
-            {t("price")} (€)
-          </label>
-          <input
-            type="number"
-            step="0.01"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm"
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1">
-            {t("category")}
+            {t("rating")}
           </label>
           <select
-            value={category}
-            onChange={(e) =>
-              setCategory(e.target.value as "phones" | "accessories")
-            }
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
             className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm"
           >
-            <option value="phones">Phones</option>
-            <option value="accessories">Accessories</option>
+            {[5, 4, 3, 2, 1].map((n) => (
+              <option key={n} value={n}>
+                {"★".repeat(n)}{"☆".repeat(5 - n)} ({n})
+              </option>
+            ))}
           </select>
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1">
-            {t("image")}
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleUpload}
-            className="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-orange-50 file:accent-text hover:file:bg-orange-100"
-          />
-          {uploading && (
-            <p className="text-xs text-gray-400 mt-1">Uploading...</p>
-          )}
-          {imageUrl && (
-            <img
-              src={imageUrl}
-              alt="Preview"
-              className="mt-2 w-16 h-16 rounded-lg object-cover"
-            />
-          )}
         </div>
       </div>
       <div>
         <label className="block text-xs font-medium text-gray-500 mb-1">
-          {t("description")}
+          {t("reviewText")}
         </label>
         <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={reviewText}
+          onChange={(e) => setReviewText(e.target.value)}
+          required
           rows={3}
           className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm resize-none"
         />

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { siteConfig } from "@/config";
+import { defaultConfig } from "@/config";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -12,10 +12,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: `${siteConfig.shopName} – Premium Phones & Accessories`,
-    template: `%s | ${siteConfig.shopName}`,
+    default: `${defaultConfig.platformName} – Premium Phones & Accessories`,
+    template: `%s | ${defaultConfig.platformName}`,
   },
-  description: siteConfig.tagline,
+  description: "Multi-tenant mobile shop platform",
 };
 
 export default async function LocaleLayout({
@@ -27,19 +27,23 @@ export default async function LocaleLayout({
 }) {
   const messages = await getMessages();
 
-  // Convert hex to RGB triplet for rgba() usage in CSS
+  // Default CSS vars - will be overridden per-shop in the [slug] layout
   const hexToRgb = (hex: string) => {
     const h = hex.replace("#", "");
     return `${parseInt(h.substring(0, 2), 16)}, ${parseInt(h.substring(2, 4), 16)}, ${parseInt(h.substring(4, 6), 16)}`;
   };
 
+  const defaultColor = defaultConfig.defaultAccentColor;
+  const defaultDark = defaultConfig.defaultAccentColorDark;
+  const defaultLight = defaultConfig.defaultAccentColorLight;
+
   const cssVars = {
-    "--color-primary": siteConfig.primaryColor,
-    "--color-primary-dark": siteConfig.primaryColorDark,
-    "--color-primary-light": siteConfig.primaryColorLight,
-    "--color-primary-rgb": hexToRgb(siteConfig.primaryColor),
-    "--color-primary-dark-rgb": hexToRgb(siteConfig.primaryColorDark),
-    "--color-primary-light-rgb": hexToRgb(siteConfig.primaryColorLight),
+    "--color-primary": defaultColor,
+    "--color-primary-dark": defaultDark,
+    "--color-primary-light": defaultLight,
+    "--color-primary-rgb": hexToRgb(defaultColor),
+    "--color-primary-dark-rgb": hexToRgb(defaultDark),
+    "--color-primary-light-rgb": hexToRgb(defaultLight),
   } as React.CSSProperties;
 
   return (

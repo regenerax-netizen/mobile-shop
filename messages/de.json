@@ -49,22 +49,9 @@
     "review2Name": "Priya D.",
     "review2Text": "Bester Handyladen der Stadt. Schneller Entsperrservice und tolle Beratung beim Handykauf. Fünf Sterne!"
   },
-  "hours": {
+  "openingHours": {
     "subtitle": "Besuchen Sie uns",
-    "title": "Öffnungszeiten",
-    "closed": "Geschlossen",
-    "today": "Heute",
-    "Monday": "Montag",
-    "Tuesday": "Dienstag",
-    "Wednesday": "Mittwoch",
-    "Thursday": "Donnerstag",
-    "Friday": "Freitag",
-    "Saturday": "Samstag",
-    "Sunday": "Sonntag"
-  },
-  "map": {
-    "subtitle": "Standort",
-    "title": "So finden Sie uns"
+    "title": "Öffnungszeiten"
   },
   "contact": {
     "subtitle": "Kontakt aufnehmen",
@@ -75,7 +62,9 @@
     "email": "E-Mail",
     "address": "Adresse",
     "openingHours": "Öffnungszeiten",
-    "getInTouch": "Kontakt aufnehmen"
+    "getInTouch": "Kontakt aufnehmen",
+    "findUs": "Standort",
+    "ourLocation": "So finden Sie uns"
   },
   "footer": {
     "rights": "Alle Rechte vorbehalten.",
@@ -146,13 +135,23 @@
     "signIn": "Mit Google anmelden",
     "signOut": "Abmelden",
     "dashboard": "Dashboard",
-    "totalProducts": "Gesamtprodukte",
-    "totalRepairs": "Gesamtreparaturen",
-    "productsSection": "Produkte verwalten",
-    "repairsSection": "Reparaturen verwalten",
-    "settingsSection": "Einstellungen",
+    "totalShops": "Shops",
+    "totalProducts": "Produkte",
+    "totalRepairs": "Reparaturen",
+    "totalReviews": "Bewertungen",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "recentShops": "Letzte Shops",
+    "shopsSection": "Shops",
+    "productsSection": "Produkte",
+    "repairsSection": "Reparaturen",
+    "reviewsSection": "Bewertungen",
+    "addShop": "Shop hinzufügen",
     "addProduct": "Produkt hinzufügen",
     "addRepair": "Reparatur hinzufügen",
+    "addReview": "Bewertung hinzufügen",
+    "allShops": "Alle Shops",
+    "shop": "Shop",
     "edit": "Bearbeiten",
     "delete": "Löschen",
     "save": "Speichern",
@@ -169,6 +168,9 @@
     "whatsapp": "WhatsApp",
     "address": "Adresse",
     "accentColor": "Akzentfarbe",
+    "rating": "Bewertung",
+    "reviewerName": "Name des Bewerters",
+    "reviewText": "Bewertungstext",
     "saved": "Gespeichert!",
     "confirmDelete": "Sind Sie sicher, dass Sie dies löschen möchten?",
     "unauthorized": "Zugriff verweigert. Nur der Administrator kann sich anmelden."

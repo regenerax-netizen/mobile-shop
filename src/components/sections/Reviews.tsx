@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { siteConfig } from "@/config";
+import type { Review } from "@/types";
 
 function Stars({ count }: { count: number }) {
   return (
@@ -20,12 +20,13 @@ function Stars({ count }: { count: number }) {
   );
 }
 
-export default function Reviews() {
+export default function Reviews({ reviews }: { reviews: Review[] }) {
   const t = useTranslations("reviews");
+
+  if (reviews.length === 0) return null;
 
   return (
     <section id="reviews" className="relative py-24 lg:py-32 overflow-hidden">
-      {/* Background */}
       <div className="absolute inset-0 bg-gray-50 mesh-gradient" />
       <div className="absolute inset-0 dot-pattern opacity-40" />
 
@@ -36,43 +37,34 @@ export default function Reviews() {
         </div>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 stagger-children">
-          {siteConfig.reviews.map((review, i) => (
-            <div key={i} className="premium-card p-8 relative">
-              {/* Giant quote mark */}
+          {reviews.map((review) => (
+            <div key={review.id} className="premium-card p-8 relative">
               <div className="absolute top-4 right-6 text-6xl font-serif leading-none accent-text opacity-10 select-none">
                 &ldquo;
               </div>
 
               <Stars count={review.rating} />
               <p className="mt-5 text-gray-600 leading-relaxed text-[15px]">
-                &ldquo;{t(`review${i}Text`)}&rdquo;
+                &ldquo;{review.review_text}&rdquo;
               </p>
 
               <div className="mt-6 pt-5 border-t border-gray-100 flex items-center gap-3">
-                {/* Avatar placeholder with gradient */}
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
                   style={{
                     background: `linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))`,
                   }}
                 >
-                  {t(`review${i}Name`).charAt(0)}
+                  {review.reviewer_name.charAt(0)}
                 </div>
                 <div>
                   <p className="font-bold text-gray-900 text-sm">
-                    {t(`review${i}Name`)}
+                    {review.reviewer_name}
                   </p>
                   <div className="flex items-center gap-1.5">
-                    <svg
-                      className="h-3.5 w-3.5 text-blue-500"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
+                    <svg className="h-3.5 w-3.5 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12c2.625 0 5.053-.847 7.024-2.28l.116-.09c.09-.069.12-.195.067-.3l-.45-.938c-.053-.11-.167-.16-.282-.117l-.113.05A9.96 9.96 0 0112 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10c0 1.38-.28 2.694-.787 3.89l-.092.2c-.046.103-.003.224.096.28l.938.45c.107.052.236.02.3-.08A11.95 11.95 0 0024 12c0-6.627-5.373-12-12-12z" />
-                      <path
-                        d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10z"
-                        opacity=".1"
-                      />
+                      <path d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10z" opacity=".1" />
                     </svg>
                     <span className="text-xs text-gray-400 font-medium">
                       {t("googleReview")}

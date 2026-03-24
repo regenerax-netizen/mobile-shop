@@ -3,9 +3,9 @@
 import { useTranslations } from "next-intl";
 import { formatPrice } from "@/lib/utils";
 import { phoneLink, whatsappLink } from "@/config";
-import type { RepairService } from "@/types";
+import type { RepairService, Shop } from "@/types";
 
-export default function RepairsList({ repairs }: { repairs: RepairService[] }) {
+export default function RepairsList({ repairs, shop }: { repairs: RepairService[]; shop: Shop }) {
   const t = useTranslations("repairs");
 
   return (
@@ -45,7 +45,7 @@ export default function RepairsList({ repairs }: { repairs: RepairService[] }) {
         <p className="text-gray-500 mb-8 text-lg">{t("contactUs")}</p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <a
-            href={phoneLink}
+            href={phoneLink(shop.phone)}
             className="btn-primary inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl text-lg font-bold shadow-xl"
           >
             <svg
@@ -60,7 +60,7 @@ export default function RepairsList({ repairs }: { repairs: RepairService[] }) {
             <span className="relative z-10">{t("contactUs")}</span>
           </a>
           <a
-            href={whatsappLink}
+            href={whatsappLink(shop.whatsapp)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl text-lg font-bold bg-[#25D366] text-white shadow-xl transition-all duration-300 hover:bg-[#1ebe5d] hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(37,211,102,0.4)]"

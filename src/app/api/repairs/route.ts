@@ -20,11 +20,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { name, price, estimated_time, description } = body;
+  const { shop_id, name, price, estimated_time, description, active } = body;
 
   const { data, error } = await supabaseAdmin
     .from("repair_services")
-    .insert({ name, price: Number(price), estimated_time, description })
+    .insert({ shop_id, name, price: Number(price), estimated_time, description, active: active ?? true })
     .select()
     .single();
 

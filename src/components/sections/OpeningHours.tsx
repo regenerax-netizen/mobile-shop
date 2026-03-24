@@ -1,78 +1,43 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { siteConfig } from "@/config";
+import type { Shop } from "@/types";
 
-export default function OpeningHours() {
-  const t = useTranslations("hours");
+export default function OpeningHours({ shop }: { shop: Shop }) {
+  const t = useTranslations("openingHours");
 
-  // Get current day of week (0 = Sunday, 1 = Monday, ...)
-  const today = new Date().getDay();
-  const dayMap = [6, 0, 1, 2, 3, 4, 5]; // Sunday→6, Mon→0, Tue→1 ...
-  const currentDayIndex = dayMap[today];
+  if (!shop.opening_hours || shop.opening_hours.length === 0) return null;
 
   return (
-    <section id="hours" className="py-24 lg:py-32 bg-white">
-      <div className="container-custom max-w-xl">
-        <div className="text-center mb-12">
+    <section id="opening-hours" className="py-24 lg:py-32 bg-white">
+      <div className="container-custom">
+        <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="section-label">{t("subtitle")}</span>
           <h2 className="section-title">{t("title")}</h2>
         </div>
 
-        <div className="premium-card overflow-hidden p-1">
-          <div className="rounded-xl overflow-hidden">
-            {siteConfig.openingHours.map((row, i) => {
-              const isClosed = row.hours.toLowerCase() === "closed";
-              const isToday = i === currentDayIndex;
-              return (
-                <div
-                  key={row.day}
-                  className={`flex items-center justify-between px-6 py-4 transition-colors ${
-                    isToday
-                      ? "bg-gradient-to-r from-orange-50/80 to-transparent"
-                      : i % 2 === 0
-                        ? "bg-gray-50/50"
-                        : "bg-white"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    {isToday && (
-                      <span className="flex h-2 w-2 relative">
-                        <span
-                          className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                          style={{ backgroundColor: "var(--color-primary)" }}
-                        />
-                        <span
-                          className="relative inline-flex rounded-full h-2 w-2"
-                          style={{ backgroundColor: "var(--color-primary)" }}
-                        />
-                      </span>
-                    )}
-                    <span
-                      className={`font-medium ${isToday ? "text-gray-900 font-bold" : "text-gray-700"}`}
-                    >
-                      {t(row.day)}
-                    </span>
-                    {isToday && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider accent-text bg-orange-50 px-2 py-0.5 rounded-full">
-                        {t("today")}
-                      </span>
-                    )}
-                  </div>
-                  <span
-                    className={`font-semibold ${
-                      isClosed
-                        ? "text-red-500"
-                        : isToday
-                          ? "accent-text font-bold"
-                          : "text-gray-600"
-                    }`}
-                  >
-                    {isClosed ? t("closed") : row.hours}
-                  </span>
-                </div>
-              );
-            })}
+        <div className="max-w-md mx-auto premium-card overflow-hidden">
+          <div
+            className="px-6 py-4"
+            style={{
+              background: `linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))`,
+            }}
+          >
+            <h3 className="text-white font-bold text-center text-lg">
+              {shop.name}
+            </h3>
+          </div>
+
+          <div className="divide-y divide-gray-100">
+            {shop.opening_hours.map((slot) => (
+              <div
+                key={slot.day}
+                className="flex justify-between items-center px-6 py-4 text-sm hover:bg-gray-50 transition-colors"
+              >
+                <span className="font-semibold text-gray-900">{slot.day}</span>
+                <span className="text-gray-500 font-medium">{slot.hours}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

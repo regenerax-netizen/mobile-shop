@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { whatsappLink, siteConfig } from "@/config";
+import { whatsappLink } from "@/config";
+import type { Shop } from "@/types";
 
-export default function SellForm() {
+export default function SellForm({ shop }: { shop: Shop }) {
   const t = useTranslations("sell");
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
@@ -42,7 +43,7 @@ export default function SellForm() {
       .join("\n");
 
     // Open WhatsApp with pre-filled message
-    const waUrl = `${whatsappLink}?text=${encodeURIComponent(message)}`;
+    const waUrl = `${whatsappLink(shop.whatsapp)}?text=${encodeURIComponent(message)}`;
     window.open(waUrl, "_blank", "noopener,noreferrer");
 
     setSubmitted(true);
@@ -264,7 +265,7 @@ export default function SellForm() {
 
         {/* WhatsApp CTA */}
         <a
-          href={whatsappLink}
+          href={whatsappLink(shop.whatsapp)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-3 premium-card p-6 hover:border-[#25D366]/30 transition-colors group"
@@ -276,7 +277,7 @@ export default function SellForm() {
           </div>
           <div>
             <p className="font-bold text-gray-900 text-sm">WhatsApp</p>
-            <p className="text-xs text-gray-500">{siteConfig.phone}</p>
+            <p className="text-xs text-gray-500">{shop.phone}</p>
           </div>
         </a>
       </div>

@@ -1,20 +1,27 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { siteConfig, phoneLink, whatsappLink } from "@/config";
+import { phoneLink, whatsappLink } from "@/config";
+import type { Shop } from "@/types";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export default function Footer() {
+export default function Footer({ shop, slug }: { shop: Shop; slug: string }) {
   const t = useTranslations("footer");
   const year = new Date().getFullYear();
+  const pathname = usePathname();
+  const locale = pathname.split("/").filter(Boolean)[0] || "de";
+  const base = `/${locale}/${slug}`;
 
-  const nameParts = siteConfig.shopName.split(" ");
+  const nameParts = shop.name.split(" ");
   const first = nameParts[0];
   const rest = nameParts.slice(1).join(" ");
 
+  const phoneLinkHref = phoneLink(shop.phone);
+  const whatsappLinkHref = whatsappLink(shop.whatsapp);
+
   return (
     <footer className="relative bg-gray-950 text-gray-400 overflow-hidden">
-      {/* Subtle top accent line */}
       <div className="h-px bg-gradient-to-r from-transparent via-[var(--color-primary)] to-transparent" />
 
       <div className="container-custom py-16 lg:py-20">
@@ -26,11 +33,11 @@ export default function Footer() {
               {rest ? ` ${rest}` : ""}
             </h3>
             <p className="mt-3 text-sm leading-relaxed max-w-xs">
-              {siteConfig.address}
+              {shop.address}
             </p>
             <div className="mt-4 flex items-center gap-4">
               <a
-                href={phoneLink}
+                href={phoneLinkHref}
                 className="inline-flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
               >
                 <svg
@@ -44,7 +51,7 @@ export default function Footer() {
                 >
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                 </svg>
-                {siteConfig.phone}
+                {shop.phone}
               </a>
             </div>
           </div>
@@ -56,25 +63,25 @@ export default function Footer() {
             </h4>
             <nav className="flex flex-col gap-3">
               <Link
-                href="/shop"
+                href={`${base}/shop`}
                 className="text-sm hover:text-white transition-colors hover:translate-x-1 transform duration-200"
               >
                 {t("products")}
               </Link>
               <Link
-                href="/repairs"
+                href={`${base}/repairs`}
                 className="text-sm hover:text-white transition-colors hover:translate-x-1 transform duration-200"
               >
                 {t("services")}
               </Link>
               <Link
-                href="/sell"
+                href={`${base}/sell`}
                 className="text-sm hover:text-white transition-colors hover:translate-x-1 transform duration-200"
               >
                 {t("sell")}
               </Link>
               <Link
-                href="/contact"
+                href={`${base}/contact`}
                 className="text-sm hover:text-white transition-colors hover:translate-x-1 transform duration-200"
               >
                 {t("contact")}
@@ -88,7 +95,7 @@ export default function Footer() {
               Social
             </h4>
             <a
-              href={whatsappLink}
+              href={whatsappLinkHref}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2.5 rounded-xl bg-white/5 px-4 py-3 text-sm font-medium text-gray-300 hover:bg-[#25D366]/10 hover:text-[#25D366] transition-all duration-300"
@@ -101,10 +108,9 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div className="mt-16 border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-600">
-            &copy; {year} {siteConfig.shopName}. {t("rights")}
+            &copy; {year} {shop.name}. {t("rights")}
           </p>
           <div className="flex items-center gap-1.5 text-xs text-gray-600">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />

@@ -5,7 +5,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function GET() {
   const { data, error } = await supabaseAdmin
-    .from("products")
+    .from("reviews")
     .select("*")
     .order("created_at", { ascending: false });
 
@@ -20,11 +20,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { shop_id, name, price, category, description, image_url, active } = body;
+  const { shop_id, reviewer_name, review_text, rating } = body;
 
   const { data, error } = await supabaseAdmin
-    .from("products")
-    .insert({ shop_id, name, price: Number(price), category, description, image_url, active: active ?? true })
+    .from("reviews")
+    .insert({
+      shop_id,
+      reviewer_name,
+      review_text,
+      rating: Number(rating),
+    })
     .select()
     .single();
 

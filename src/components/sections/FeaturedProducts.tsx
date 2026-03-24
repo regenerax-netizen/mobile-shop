@@ -1,16 +1,19 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
 import type { Product } from "@/types";
 
 export default function FeaturedProducts({
   products,
+  slug,
 }: {
   products: Product[];
+  slug: string;
 }) {
   const t = useTranslations("products");
+  const locale = useLocale();
 
   if (products.length === 0) {
     return (
@@ -37,7 +40,7 @@ export default function FeaturedProducts({
           {products.slice(0, 6).map((product) => (
             <Link
               key={product.id}
-              href={`/shop/${product.id}`}
+              href={`/${locale}/${slug}/shop/${product.id}`}
               className="group premium-card overflow-hidden"
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50">
@@ -90,7 +93,7 @@ export default function FeaturedProducts({
 
         <div className="mt-14 text-center">
           <Link
-            href="/shop"
+            href={`/${locale}/${slug}/shop`}
             className="btn-primary inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-base"
           >
             <span className="relative z-10">{t("viewAll")}</span>

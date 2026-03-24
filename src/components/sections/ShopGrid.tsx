@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
 import type { Product } from "@/types";
 
-export default function ShopGrid({ products }: { products: Product[] }) {
+export default function ShopGrid({ products, slug }: { products: Product[]; slug?: string }) {
   const t = useTranslations("shop");
+  const locale = useLocale();
   const [filter, setFilter] = useState<"all" | "phones" | "accessories">("all");
 
   const filtered =
@@ -46,7 +47,7 @@ export default function ShopGrid({ products }: { products: Product[] }) {
           {filtered.map((product) => (
             <Link
               key={product.id}
-              href={`/shop/${product.id}`}
+              href={slug ? `/${locale}/${slug}/shop/${product.id}` : `/${locale}/shop/${product.id}`}
               className="group premium-card rounded-2xl overflow-hidden"
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">

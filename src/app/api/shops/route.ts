@@ -5,7 +5,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function GET() {
   const { data, error } = await supabaseAdmin
-    .from("products")
+    .from("shops")
     .select("*")
     .order("created_at", { ascending: false });
 
@@ -20,11 +20,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { shop_id, name, price, category, description, image_url, active } = body;
+  const {
+    name, slug, tagline, phone, whatsapp, email, address,
+    google_maps_embed_url, logo_url, hero_image_url, accent_color,
+    opening_hours, services, active,
+  } = body;
 
   const { data, error } = await supabaseAdmin
-    .from("products")
-    .insert({ shop_id, name, price: Number(price), category, description, image_url, active: active ?? true })
+    .from("shops")
+    .insert({
+      name, slug, tagline, phone, whatsapp, email, address,
+      google_maps_embed_url, logo_url, hero_image_url, accent_color,
+      opening_hours: opening_hours ?? [],
+      services: services ?? [],
+      active: active ?? true,
+    })
     .select()
     .single();
 

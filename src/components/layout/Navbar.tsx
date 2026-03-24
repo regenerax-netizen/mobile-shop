@@ -2,20 +2,28 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { siteConfig, phoneLink, whatsappLink } from "@/config";
+import { phoneLink, whatsappLink } from "@/config";
+import type { Shop } from "@/types";
 import LanguageToggle from "@/components/ui/LanguageToggle";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navbar({
   variant = "transparent",
+  shop,
 }: {
   variant?: "transparent" | "solid";
+  shop: Shop;
 }) {
   const t = useTranslations("nav");
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
 
-  // For "solid" variant, behave as if always scrolled (dark text on white bg)
+  // Extract slug from pathname: /de/mobilehub/... → mobilehub
+  const segments = pathname.split("/").filter(Boolean);
+  const slug = segments[1] || shop.slug;
+
   const isDark = variant === "solid" || scrolled;
 
   useEffect(() => {
@@ -24,7 +32,6 @@ export default function Navbar({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => {
@@ -32,13 +39,19 @@ export default function Navbar({
     };
   }, [menuOpen]);
 
+  const locale = segments[0] || "de";
+  const base = `/${locale}/${slug}`;
+
   const links = [
-    { label: t("home"), href: "/" },
-    { label: t("shop"), href: "/shop" },
-    { label: t("repairs"), href: "/repairs" },
-    { label: t("sell"), href: "/sell" },
-    { label: t("contact"), href: "/contact" },
+    { label: t("home"), href: base },
+    { label: t("shop"), href: `${base}/shop` },
+    { label: t("repairs"), href: `${base}/repairs` },
+    { label: t("sell"), href: `${base}/sell` },
+    { label: t("contact"), href: `${base}/contact` },
   ];
+
+  const phoneLinkHref = phoneLink(shop.phone);
+  const whatsappLinkHref = whatsappLink(shop.whatsapp);
 
   return (
     <>
@@ -52,15 +65,15 @@ export default function Navbar({
         <div className="container-custom flex items-center justify-between h-[72px]">
           {/* Logo */}
           <Link
-            href="/"
+            href={base}
             className={`text-xl font-extrabold tracking-tight transition-all duration-300 ${
               isDark ? "text-gray-900" : "text-white"
             }`}
           >
             <span className="accent-gradient">
-              {siteConfig.shopName.slice(0, -3)}
+              {shop.name.slice(0, -3)}
             </span>
-            <span>{siteConfig.shopName.slice(-3)}</span>
+            <span>{shop.name.slice(-3)}</span>
           </Link>
 
           {/* Desktop nav */}
@@ -85,7 +98,7 @@ export default function Navbar({
           <div className="hidden md:flex items-center gap-3">
             <LanguageToggle scrolled={isDark} />
             <a
-              href={whatsappLink}
+              href={whatsappLinkHref}
               target="_blank"
               rel="noopener noreferrer"
               className={`p-2.5 rounded-xl transition-all duration-300 ${
@@ -100,7 +113,7 @@ export default function Navbar({
               </svg>
             </a>
             <a
-              href={phoneLink}
+              href={phoneLinkHref}
               className="btn-primary flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold animate-pulse-glow"
             >
               <svg
@@ -151,14 +164,12 @@ export default function Navbar({
           menuOpen ? "visible" : "invisible"
         }`}
       >
-        {/* Backdrop */}
         <div
           className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-500 ${
             menuOpen ? "opacity-100" : "opacity-0"
           }`}
           onClick={() => setMenuOpen(false)}
         />
-        {/* Panel */}
         <div
           className={`absolute top-0 right-0 w-[85%] max-w-sm h-full bg-white shadow-2xl transition-transform duration-500 ease-out ${
             menuOpen ? "translate-x-0" : "translate-x-full"
@@ -180,7 +191,7 @@ export default function Navbar({
             </nav>
             <div className="space-y-3 pb-10 pt-6 border-t border-gray-100">
               <a
-                href={phoneLink}
+                href={phoneLinkHref}
                 className="btn-primary flex items-center justify-center gap-2 w-full px-6 py-4 rounded-xl text-base font-semibold"
               >
                 <svg
@@ -195,7 +206,7 @@ export default function Navbar({
                 <span className="relative z-10">{t("callNow")}</span>
               </a>
               <a
-                href={whatsappLink}
+                href={whatsappLinkHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full px-6 py-4 rounded-xl text-base font-semibold bg-[#25D366] text-white hover:bg-[#1ebe5d] transition-colors"

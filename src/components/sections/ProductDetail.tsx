@@ -1,13 +1,14 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
 import { phoneLink, whatsappLink } from "@/config";
-import type { Product } from "@/types";
+import type { Product, Shop } from "@/types";
 
-export default function ProductDetail({ product }: { product: Product }) {
+export default function ProductDetail({ product, shop, slug }: { product: Product; shop: Shop; slug: string }) {
   const t = useTranslations("productDetail");
+  const locale = useLocale();
 
   const whatsappMsg = encodeURIComponent(
     `Hi, I'm interested in: ${product.name} (${formatPrice(product.price)})`,
@@ -16,7 +17,7 @@ export default function ProductDetail({ product }: { product: Product }) {
   return (
     <div className="container-custom">
       <Link
-        href="/shop"
+        href={`/${locale}/${slug}/shop`}
         className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-900 mb-8 transition-colors group"
       >
         <svg
@@ -71,7 +72,7 @@ export default function ProductDetail({ product }: { product: Product }) {
           {/* Contact buttons */}
           <div className="mt-10 flex flex-col sm:flex-row gap-4">
             <a
-              href={phoneLink}
+              href={phoneLink(shop.phone)}
               className="btn-primary inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl text-base font-bold shadow-xl"
             >
               <svg
@@ -86,7 +87,7 @@ export default function ProductDetail({ product }: { product: Product }) {
               <span className="relative z-10">{t("callAbout")}</span>
             </a>
             <a
-              href={`${whatsappLink}?text=${whatsappMsg}`}
+              href={`${whatsappLink(shop.whatsapp)}?text=${whatsappMsg}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl text-base font-bold bg-[#25D366] text-white shadow-xl transition-all duration-300 hover:bg-[#1ebe5d] hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(37,211,102,0.4)]"

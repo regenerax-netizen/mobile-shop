@@ -12,11 +12,11 @@ export async function PUT(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { name, price, estimated_time, description } = body;
+  const { shop_id, name, price, estimated_time, description, active } = body;
 
   const { data, error } = await supabaseAdmin
     .from("repair_services")
-    .update({ name, price: Number(price), estimated_time, description })
+    .update({ shop_id, name, price: Number(price), estimated_time, description, active })
     .eq("id", params.id)
     .select()
     .single();
