@@ -1,25 +1,6 @@
-import Hero from "@/components/sections/Hero";
-import Services from "@/components/sections/Services";
-import FeaturedProducts from "@/components/sections/FeaturedProducts";
-import Reviews from "@/components/sections/Reviews";
-import OpeningHours from "@/components/sections/OpeningHours";
-import GoogleMap from "@/components/sections/GoogleMap";
-import Contact from "@/components/sections/Contact";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  return (
-    <>
-      <Navbar />
-      <Hero />
-      <Services />
-      <FeaturedProducts />
-      <Reviews />
-      <OpeningHours />
-      <GoogleMap />
-      <Contact />
-      <Footer />
-    </>
-  );
+export default function RootPage() {
+  // Redirect to default locale (middleware will handle this, but just in case)
+  redirect("/de");
 }

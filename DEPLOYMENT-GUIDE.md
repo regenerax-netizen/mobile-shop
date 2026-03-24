@@ -110,7 +110,7 @@ Before clicking "Deploy", add these environment variables:
 | `NEXT_PUBLIC_SUPABASE_URL`      | Your Supabase project URL                                          |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anon key                                             |
 | `SUPABASE_SERVICE_ROLE_KEY`     | Your Supabase service role key                                     |
-| `NEXTAUTH_SECRET`               | Generate one: run `openssl rand -base64 32` in terminal            |
+| `NEXTAUTH_SECRET`               | Generate one: run `openssl rand -base64 32` in PowerShell          |
 | `NEXTAUTH_URL`                  | `https://your-domain.vercel.app` (update later with custom domain) |
 | `GOOGLE_CLIENT_ID`              | From Google Cloud (see section 6)                                  |
 | `GOOGLE_CLIENT_SECRET`          | From Google Cloud (see section 6)                                  |
