@@ -206,6 +206,26 @@ function ShopForm({
   const [partnerLogoUploading, setPartnerLogoUploading] = useState<string | null>(null);
   const [active, setActive] = useState(initial?.active ?? true);
 
+  const DEFAULT_OPENING_HOURS = [
+    { day: "Monday", hours: "9:00 AM – 6:00 PM" },
+    { day: "Tuesday", hours: "9:00 AM – 6:00 PM" },
+    { day: "Wednesday", hours: "9:00 AM – 6:00 PM" },
+    { day: "Thursday", hours: "9:00 AM – 7:00 PM" },
+    { day: "Friday", hours: "9:00 AM – 7:00 PM" },
+    { day: "Saturday", hours: "10:00 AM – 5:00 PM" },
+    { day: "Sunday", hours: "Closed" },
+  ];
+
+  const [openingHours, setOpeningHours] = useState<{ day: string; hours: string }[]>(
+    initial?.opening_hours && initial.opening_hours.length > 0
+      ? initial.opening_hours
+      : DEFAULT_OPENING_HOURS,
+  );
+
+  const updateHours = (idx: number, hours: string) => {
+    setOpeningHours((prev) => prev.map((entry, i) => (i === idx ? { ...entry, hours } : entry)));
+  };
+
   const handleImageFiles = async (files: FileList) => {
     setUploadError("");
     setUploading(true);
@@ -280,7 +300,7 @@ function ShopForm({
         .map((s) => s.trim())
         .filter(Boolean),
       partner_logos: partnerLogos,
-      opening_hours: initial?.opening_hours ?? [],
+      opening_hours: openingHours,
       services: initial?.services ?? [],
       active,
     });
@@ -574,7 +594,7 @@ function ShopForm({
                       )}
                       <input
                         type="file"
-                        accept="image/*"
+                        accept="image/*,.svg"
                         className="hidden"
                         onChange={(e) => {
                           const f = e.target.files?.[0];
@@ -589,6 +609,31 @@ function ShopForm({
             </div>
           )}
         </div>
+
+        {/* ── Opening Hours Editor ── */}
+        <div className="sm:col-span-2">
+          <label className="block text-xs font-medium text-gray-500 mb-2">
+            Öffnungszeiten
+          </label>
+          <div className="space-y-2">
+            {openingHours.map((entry, idx) => (
+              <div key={entry.day} className="flex items-center gap-3">
+                <span className="w-28 text-sm font-medium text-gray-700">{entry.day}</span>
+                <input
+                  type="text"
+                  value={entry.hours}
+                  onChange={(e) => updateHours(idx, e.target.value)}
+                  placeholder="z.B. 9:00 AM – 6:00 PM oder Closed"
+                  className="flex-1 px-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm"
+                />
+              </div>
+            ))}
+          </div>
+          <p className="mt-1.5 text-xs text-gray-400">
+            Geben Sie die Zeiten ein oder &quot;Closed&quot; für Ruhetage
+          </p>
+        </div>
+
         <div className="flex items-center gap-3">
           <label className="block text-xs font-medium text-gray-500">
             {t("active")}

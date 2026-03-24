@@ -33,10 +33,23 @@ const DEFAULT_REPAIRS = [
   { name: "Kamera-Reparatur", price: 89, estimated_time: "30–60 Min", description: "Austausch defekter Front- oder Rückkameras. Scharfe Fotos und Videos wie am ersten Tag.", active: true },
 ];
 
+const DEFAULT_SERVICES = [
+  { title: "Phone Repair", icon: "wrench" },
+  { title: "Phone Sales", icon: "smartphone" },
+  { title: "Accessories", icon: "headphones" },
+  { title: "SIM Cards & Unlocking", icon: "sim" },
+];
+
 const DEFAULT_REVIEWS = [
   { reviewer_name: "Sarah M.", review_text: "Toller Service! Mein Display wurde in unter einer Stunde ausgetauscht. Faire Preise und super freundliches Personal.", rating: 5 },
   { reviewer_name: "Thomas K.", review_text: "Habe hier ein generalüberholtes iPhone gekauft — funktioniert wie neu. Sehr empfehlenswert!", rating: 5 },
   { reviewer_name: "Priya D.", review_text: "Bester Handyladen der Stadt. Schneller Entsperrservice und tolle Beratung beim Handykauf. Fünf Sterne!", rating: 5 },
+  { reviewer_name: "Lukas W.", review_text: "Schnelle Akku-Reparatur zu einem fairen Preis. Funktioniert wieder einwandfrei. Kann ich nur weiterempfehlen!", rating: 5 },
+  { reviewer_name: "Maria G.", review_text: "Habe mein altes Samsung hier verkauft und direkt ein neues bekommen. Sehr faire Ankaufspreise und tolle Beratung.", rating: 4 },
+  { reviewer_name: "Ahmed R.", review_text: "Mein Handy hatte einen Wasserschaden und ich dachte, es sei verloren. Die haben es tatsächlich gerettet! Profis!", rating: 5 },
+  { reviewer_name: "Julia S.", review_text: "Beste Anlaufstelle für Handyzubehör. Große Auswahl, gute Qualität und faire Preise. Komme immer wieder.", rating: 4 },
+  { reviewer_name: "Max B.", review_text: "Ladeanschluss kaputt — innerhalb von 45 Minuten repariert. Super schnell und zuverlässig. Vielen Dank!", rating: 5 },
+  { reviewer_name: "Fatima H.", review_text: "Sehr freundliches Team, das sich wirklich Zeit für die Beratung nimmt. Fühle mich als Kundin gut aufgehoben.", rating: 5 },
 ];
 
 export async function POST(req: NextRequest) {
@@ -61,8 +74,16 @@ export async function POST(req: NextRequest) {
       secondary_color: secondary_color ?? "",
       partner_services: partner_services ?? [],
       partner_logos: partner_logos ?? {},
-      opening_hours: opening_hours ?? [],
-      services: services ?? [],
+      opening_hours: opening_hours && opening_hours.length > 0 ? opening_hours : [
+        { day: "Monday", hours: "9:00 AM – 6:00 PM" },
+        { day: "Tuesday", hours: "9:00 AM – 6:00 PM" },
+        { day: "Wednesday", hours: "9:00 AM – 6:00 PM" },
+        { day: "Thursday", hours: "9:00 AM – 7:00 PM" },
+        { day: "Friday", hours: "9:00 AM – 7:00 PM" },
+        { day: "Saturday", hours: "10:00 AM – 5:00 PM" },
+        { day: "Sunday", hours: "Closed" },
+      ],
+      services: services && services.length > 0 ? services : DEFAULT_SERVICES,
       active: active ?? true,
     })
     .select()

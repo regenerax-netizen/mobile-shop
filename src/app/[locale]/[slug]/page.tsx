@@ -49,9 +49,9 @@ export default async function ShopHomePage({
       <Hero shop={shop} />
       <Services shop={shop} />
       <FeaturedProducts products={products} slug={params.slug} />
-      <FAQ shop={shop} />
       <Reviews reviews={reviews} />
       <OpeningHours shop={shop} />
+      <FAQ shop={shop} />
       <GoogleMap shop={shop} />
       <Contact shop={shop} />
       <Footer shop={shop} slug={params.slug} />

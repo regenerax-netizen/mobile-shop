@@ -124,7 +124,13 @@ WHERE slug = 'mobilehub' AND (tagline = 'Your Trusted Mobile Phone Specialists' 
 INSERT INTO reviews (shop_id, reviewer_name, review_text, rating) VALUES
   ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Sarah M.', 'Toller Service! Mein Display wurde in unter einer Stunde ausgetauscht. Faire Preise und super freundliches Personal.', 5),
   ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Thomas K.', 'Habe hier ein generalüberholtes iPhone gekauft — funktioniert wie neu. Sehr zu empfehlen!', 5),
-  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Priya D.', 'Bester Handyladen der Stadt. Schneller Entsperrservice und tolle Beratung beim Handykauf. Fünf Sterne!', 5)
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Priya D.', 'Bester Handyladen der Stadt. Schneller Entsperrservice und tolle Beratung beim Handykauf. Fünf Sterne!', 5),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Lukas W.', 'Schnelle Akku-Reparatur zu einem fairen Preis. Funktioniert wieder einwandfrei. Kann ich nur weiterempfehlen!', 5),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Maria G.', 'Habe mein altes Samsung hier verkauft und direkt ein neues bekommen. Sehr faire Ankaufspreise und tolle Beratung.', 4),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Ahmed R.', 'Mein Handy hatte einen Wasserschaden und ich dachte, es sei verloren. Die haben es tatsächlich gerettet! Profis!', 5),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Julia S.', 'Beste Anlaufstelle für Handyzubehör. Große Auswahl, gute Qualität und faire Preise. Komme immer wieder.', 4),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Max B.', 'Ladeanschluss kaputt — innerhalb von 45 Minuten repariert. Super schnell und zuverlässig. Vielen Dank!', 5),
+  ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Fatima H.', 'Sehr freundliches Team, das sich wirklich Zeit für die Beratung nimmt. Fühle mich als Kundin gut aufgehoben.', 5)
 ON CONFLICT DO NOTHING;
 
 -- ─── 9. SUPABASE STORAGE — public bucket for shop hero images ───────────
@@ -134,7 +140,7 @@ VALUES (
   'shop-images',
   true,
   10485760,
-  ARRAY['image/jpeg','image/jpg','image/png','image/webp','image/gif']
+  ARRAY['image/jpeg','image/jpg','image/png','image/webp','image/gif','image/svg+xml']
 )
 ON CONFLICT (id) DO NOTHING;
 

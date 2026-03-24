@@ -16,8 +16,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No file provided" }, { status: 400 });
 
   // Validate type and size
-  if (!file.type.startsWith("image/"))
-    return NextResponse.json({ error: "Only image files are allowed" }, { status: 400 });
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
+  if (!allowedTypes.includes(file.type))
+    return NextResponse.json({ error: "Only image files (JPG, PNG, WebP, GIF, SVG) are allowed" }, { status: 400 });
   if (file.size > 10 * 1024 * 1024)
     return NextResponse.json({ error: "File too large (max 10 MB)" }, { status: 400 });
 

@@ -40,7 +40,7 @@ export default function Hero({ shop }: { shop: Shop }) {
   }, [images.length]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background images with crossfade — optimised with next/image */}
       {images.map((img, i) => (
         <div
@@ -56,7 +56,7 @@ export default function Hero({ shop }: { shop: Shop }) {
             src={img}
             alt={`${shop.name} hero ${i + 1}`}
             fill
-            className="object-cover"
+            className="object-cover object-center"
             sizes="100vw"
             priority={i === 0}
             quality={80}
@@ -69,16 +69,16 @@ export default function Hero({ shop }: { shop: Shop }) {
       <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
 
       <div
-        className="absolute top-20 left-10 w-72 h-72 rounded-full opacity-20 blur-3xl"
+        className="absolute top-20 left-10 w-48 h-48 sm:w-72 sm:h-72 rounded-full opacity-20 blur-3xl"
         style={{ background: "var(--color-primary)" }}
       />
       <div
-        className="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-10 blur-3xl"
+        className="absolute bottom-20 right-10 w-64 h-64 sm:w-96 sm:h-96 rounded-full opacity-10 blur-3xl"
         style={{ background: "var(--color-primary-light)" }}
       />
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+      <div className="relative z-10 text-center px-5 sm:px-4 max-w-4xl mx-auto">
         <div className="animate-fade-up inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card-dark mb-8">
           <span className="flex h-2 w-2 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
@@ -90,14 +90,14 @@ export default function Hero({ shop }: { shop: Shop }) {
         </div>
 
         <h1
-          className="animate-fade-up text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white leading-[0.95] tracking-tight"
+          className="animate-fade-up text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.95] tracking-tight"
           style={{ animationDelay: "100ms" }}
         >
           {shop.name}
         </h1>
 
         <p
-          className="animate-fade-up mt-6 text-lg sm:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed font-light"
+          className="animate-fade-up mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed font-light"
           style={{ animationDelay: "200ms" }}
         >
           {shop.tagline}
