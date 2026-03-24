@@ -30,8 +30,20 @@ const icons: Record<string, React.ReactNode> = {
   ),
 };
 
+const partnerColors: Record<string, string> = {
+  "Lyca Mobile": "#e30613",
+  "Ortel Mobile": "#00a650",
+  "Lebara": "#e5007d",
+  "MoneyGram": "#f37021",
+  "Western Union": "#ffdd00",
+  "Blau": "#0066cc",
+  "Aldi Talk": "#00599c",
+  "Congstar": "#ff7300",
+};
+
 export default function Services({ shop }: { shop: Shop }) {
   const t = useTranslations("services");
+  const hasPartners = shop.partner_services && shop.partner_services.length > 0;
 
   return (
     <section id="services" className="relative py-24 lg:py-32 overflow-hidden">
@@ -75,6 +87,30 @@ export default function Services({ shop }: { shop: Shop }) {
             </div>
           ))}
         </div>
+
+        {/* Partner Services */}
+        {hasPartners && (
+          <div className="mt-20">
+            <div className="text-center mb-10">
+              <h3 className="text-2xl font-bold text-gray-900">{t("partnerTitle")}</h3>
+              <p className="text-gray-500 mt-2">{t("partnerDesc")}</p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              {shop.partner_services.map((name) => (
+                <div
+                  key={name}
+                  className="premium-card px-6 py-4 flex items-center gap-3 hover:-translate-y-1 transition-transform"
+                >
+                  <div
+                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: partnerColors[name] || "var(--color-primary)" }}
+                  />
+                  <span className="font-semibold text-gray-900 whitespace-nowrap">{name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

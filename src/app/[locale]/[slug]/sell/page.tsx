@@ -34,12 +34,11 @@ export default async function SellPage({
     <>
       <Navbar variant="solid" shop={shop} />
       <main className="pt-24 pb-16 min-h-screen bg-gray-50">
-        <div className="max-w-3xl mx-auto px-4">
-          <div className="mb-10">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              {t("title")}
-            </h1>
-            <p className="text-gray-500 text-lg">{t("subtitle")}</p>
+        <div className="container-custom">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="section-label">{t("subtitle")}</span>
+            <h1 className="section-title">{t("title")}</h1>
+            <p className="section-desc">{t("description")}</p>
           </div>
           <SellForm shop={shop} />
         </div>

@@ -11,9 +11,12 @@ export interface Shop {
   google_maps_embed_url: string;
   logo_url: string;
   hero_image_url: string;
+  hero_images: string[];
   accent_color: string;
+  secondary_color: string;
   opening_hours: { day: string; hours: string }[];
   services: { title: string; icon: string }[];
+  partner_services: string[];
   active: boolean;
   created_at: string;
 }

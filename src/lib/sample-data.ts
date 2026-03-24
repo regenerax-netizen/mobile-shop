@@ -14,7 +14,15 @@ export const sampleShop: Shop = {
   logo_url: "",
   hero_image_url:
     "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1920&auto=format&fit=crop",
+  hero_images: [
+    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1920&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1556656793-08538906a9f8?q=80&w=1920&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?q=80&w=1920&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1580910051074-3eb694886571?q=80&w=1920&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?q=80&w=1920&auto=format&fit=crop"
+  ],
   accent_color: "#f97316",
+  secondary_color: "#1e3a5f",
   opening_hours: [
     { day: "Monday", hours: "9:00 AM – 6:00 PM" },
     { day: "Tuesday", hours: "9:00 AM – 6:00 PM" },
@@ -30,6 +38,7 @@ export const sampleShop: Shop = {
     { title: "Accessories", icon: "headphones" },
     { title: "SIM Cards & Unlocking", icon: "sim" },
   ],
+  partner_services: ["Lyca Mobile", "Ortel Mobile", "Lebara", "MoneyGram"],
   active: true,
   created_at: new Date().toISOString(),
 };

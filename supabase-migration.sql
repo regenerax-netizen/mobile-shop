@@ -79,6 +79,18 @@ ON CONFLICT (slug) DO NOTHING;
 UPDATE products SET shop_id = (SELECT id FROM shops WHERE slug = 'mobilehub') WHERE shop_id IS NULL;
 UPDATE repair_services SET shop_id = (SELECT id FROM shops WHERE slug = 'mobilehub') WHERE shop_id IS NULL;
 
+-- ─── 8. PHASE 9 — New columns for hero_images, secondary_color, partner_services
+ALTER TABLE shops ADD COLUMN IF NOT EXISTS hero_images        JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE shops ADD COLUMN IF NOT EXISTS secondary_color    TEXT DEFAULT '';
+ALTER TABLE shops ADD COLUMN IF NOT EXISTS partner_services   JSONB DEFAULT '[]'::jsonb;
+
+-- Backfill sample shop
+UPDATE shops SET
+  hero_images = '["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1920&auto=format&fit=crop","https://images.unsplash.com/photo-1556656793-08538906a9f8?q=80&w=1920&auto=format&fit=crop","https://images.unsplash.com/photo-1565849904461-04a58ad377e0?q=80&w=1920&auto=format&fit=crop","https://images.unsplash.com/photo-1580910051074-3eb694886571?q=80&w=1920&auto=format&fit=crop","https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?q=80&w=1920&auto=format&fit=crop"]'::jsonb,
+  secondary_color = '#1e3a5f',
+  partner_services = '["Lyca Mobile","Ortel Mobile","Lebara","MoneyGram"]'::jsonb
+WHERE slug = 'mobilehub';
+
 -- Sample reviews
 INSERT INTO reviews (shop_id, reviewer_name, review_text, rating) VALUES
   ((SELECT id FROM shops WHERE slug = 'mobilehub'), 'Sarah M.', 'Brilliant service! Had my screen replaced in under an hour. Prices are very fair and the staff are super friendly.', 5),

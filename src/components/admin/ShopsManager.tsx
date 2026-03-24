@@ -183,8 +183,17 @@ function ShopForm({
   const [heroImageUrl, setHeroImageUrl] = useState(
     initial?.hero_image_url ?? "",
   );
+  const [heroImagesText, setHeroImagesText] = useState(
+    (initial?.hero_images ?? []).join("\n"),
+  );
   const [accentColor, setAccentColor] = useState(
     initial?.accent_color ?? "#f97316",
+  );
+  const [secondaryColor, setSecondaryColor] = useState(
+    initial?.secondary_color ?? "#1e3a5f",
+  );
+  const [partnerServicesText, setPartnerServicesText] = useState(
+    (initial?.partner_services ?? []).join(", "),
   );
   const [active, setActive] = useState(initial?.active ?? true);
 
@@ -201,7 +210,16 @@ function ShopForm({
       google_maps_embed_url: googleMapsEmbedUrl,
       logo_url: logoUrl,
       hero_image_url: heroImageUrl,
+      hero_images: heroImagesText
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean),
       accent_color: accentColor,
+      secondary_color: secondaryColor,
+      partner_services: partnerServicesText
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
       opening_hours: initial?.opening_hours ?? [],
       services: initial?.services ?? [],
       active,
@@ -336,6 +354,18 @@ function ShopForm({
             className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm"
           />
         </div>
+        <div className="sm:col-span-2">
+          <label className="block text-xs font-medium text-gray-500 mb-1">
+            {t("heroImages")}
+          </label>
+          <textarea
+            value={heroImagesText}
+            onChange={(e) => setHeroImagesText(e.target.value)}
+            rows={4}
+            placeholder={"https://...\nhttps://..."}
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm resize-none"
+          />
+        </div>
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1">
             {t("accentColor")}
@@ -354,6 +384,37 @@ function ShopForm({
               className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm"
             />
           </div>
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-1">
+            {t("secondaryColor")}
+          </label>
+          <div className="flex items-center gap-3">
+            <input
+              type="color"
+              value={secondaryColor}
+              onChange={(e) => setSecondaryColor(e.target.value)}
+              className="w-10 h-10 rounded-lg border border-gray-200 cursor-pointer"
+            />
+            <input
+              type="text"
+              value={secondaryColor}
+              onChange={(e) => setSecondaryColor(e.target.value)}
+              className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm"
+            />
+          </div>
+        </div>
+        <div className="sm:col-span-2">
+          <label className="block text-xs font-medium text-gray-500 mb-1">
+            {t("partnerServices")}
+          </label>
+          <input
+            type="text"
+            value={partnerServicesText}
+            onChange={(e) => setPartnerServicesText(e.target.value)}
+            placeholder="Lyca Mobile, Ortel Mobile, Lebara, MoneyGram"
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-200 focus:border-orange-400 outline-none text-sm"
+          />
         </div>
         <div className="flex items-center gap-3">
           <label className="block text-xs font-medium text-gray-500">

@@ -11,7 +11,11 @@
   "hero": {
     "tagline": "Jetzt geöffnet — Wir helfen gerne",
     "callNow": "Jetzt anrufen",
-    "whatsapp": "WhatsApp schreiben"
+    "whatsapp": "WhatsApp schreiben",
+    "badgeRepairs": "Express-Reparaturen",
+    "badgeWarranty": "Garantie inklusive",
+    "badgeRated": "5-Sterne-Bewertung",
+    "scroll": "Scrollen"
   },
   "services": {
     "subtitle": "Was wir anbieten",
@@ -25,7 +29,9 @@
     "item2Desc": "Hüllen, Panzerglas, Ladekabel, Kopfhörer, Powerbanks — alles was Sie brauchen.",
     "item3Title": "SIM-Karten & Entsperrung",
     "item3Desc": "SIM-Only-Angebote, Prepaid-SIMs und professionelle Handy-Entsperrung.",
-    "learnMore": "Mehr erfahren"
+    "learnMore": "Mehr erfahren",
+    "partnerTitle": "Unsere Partner",
+    "partnerDesc": "Offizielle Partner-Services direkt bei uns verfügbar"
   },
   "products": {
     "subtitle": "Jetzt einkaufen",
@@ -51,7 +57,8 @@
   },
   "openingHours": {
     "subtitle": "Besuchen Sie uns",
-    "title": "Öffnungszeiten"
+    "title": "Öffnungszeiten",
+    "today": "Heute"
   },
   "contact": {
     "subtitle": "Kontakt aufnehmen",
@@ -116,8 +123,16 @@
     "yourPhonePlaceholder": "+49 123 456789",
     "yourEmail": "Ihre E-Mail (optional)",
     "yourEmailPlaceholder": "max@beispiel.de",
+    "expectedPrice": "Ihr Wunschpreis",
+    "expectedPricePlaceholder": "z.B. 200",
+    "devicePhotos": "Fotos Ihres Geräts",
+    "dragDropPhotos": "Klicken oder Fotos hierher ziehen",
+    "maxPhotos": "Maximal 4 Fotos",
+    "photosAttached": "Foto(s) angehängt",
     "additionalInfo": "Zusätzliche Informationen",
     "additionalInfoPlaceholder": "Speicher, Farbe, Zubehör dabei, bekannte Defekte...",
+    "preferWhatsApp": "Lieber per WhatsApp?",
+    "sendUsPhotos": "Senden Sie uns Fotos direkt per Chat",
     "submit": "Anfrage senden",
     "successTitle": "Anfrage gesendet!",
     "successMessage": "Vielen Dank! Wir melden uns innerhalb von 24 Stunden mit einem Angebot bei Ihnen.",
@@ -168,6 +183,9 @@
     "whatsapp": "WhatsApp",
     "address": "Adresse",
     "accentColor": "Akzentfarbe",
+    "secondaryColor": "Sekundärfarbe",
+    "heroImages": "Hero-Bilder (URLs, eins pro Zeile)",
+    "partnerServices": "Partner-Services",
     "rating": "Bewertung",
     "reviewerName": "Name des Bewerters",
     "reviewText": "Bewertungstext",

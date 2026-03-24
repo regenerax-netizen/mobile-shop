@@ -11,7 +11,11 @@
   "hero": {
     "tagline": "Open Now — Ready to Help",
     "callNow": "Call Now",
-    "whatsapp": "WhatsApp Us"
+    "whatsapp": "WhatsApp Us",
+    "badgeRepairs": "Express Repairs",
+    "badgeWarranty": "Warranty Included",
+    "badgeRated": "5-Star Rated",
+    "scroll": "Scroll"
   },
   "services": {
     "subtitle": "What We Do",
@@ -25,7 +29,9 @@
     "item2Desc": "Cases, tempered glass, chargers, earphones, power banks — everything you need.",
     "item3Title": "SIM Cards & Unlocking",
     "item3Desc": "SIM-only deals, pay-as-you-go SIMs, and professional phone unlocking.",
-    "learnMore": "Learn more"
+    "learnMore": "Learn more",
+    "partnerTitle": "Our Partners",
+    "partnerDesc": "Official partner services available directly at our shop"
   },
   "products": {
     "subtitle": "Shop Now",
@@ -51,7 +57,8 @@
   },
   "openingHours": {
     "subtitle": "Visit Us",
-    "title": "Opening Hours"
+    "title": "Opening Hours",
+    "today": "Today"
   },
   "contact": {
     "subtitle": "Get In Touch",
@@ -116,8 +123,16 @@
     "yourPhonePlaceholder": "+44 7700 900123",
     "yourEmail": "Your Email (optional)",
     "yourEmailPlaceholder": "john@example.com",
+    "expectedPrice": "Your Expected Price",
+    "expectedPricePlaceholder": "e.g. 200",
+    "devicePhotos": "Device Photos",
+    "dragDropPhotos": "Click or drag photos here",
+    "maxPhotos": "Up to 4 photos",
+    "photosAttached": "photo(s) attached",
     "additionalInfo": "Additional Information",
     "additionalInfoPlaceholder": "Storage, colour, accessories included, known defects...",
+    "preferWhatsApp": "Prefer WhatsApp?",
+    "sendUsPhotos": "Send us photos directly via chat",
     "submit": "Submit Request",
     "successTitle": "Request Submitted!",
     "successMessage": "Thank you! We'll get back to you within 24 hours with an offer.",
@@ -168,6 +183,9 @@
     "whatsapp": "WhatsApp",
     "address": "Address",
     "accentColor": "Accent Color",
+    "secondaryColor": "Secondary Color",
+    "heroImages": "Hero Images (URLs, one per line)",
+    "partnerServices": "Partner Services",
     "rating": "Rating",
     "reviewerName": "Reviewer Name",
     "reviewText": "Review Text",

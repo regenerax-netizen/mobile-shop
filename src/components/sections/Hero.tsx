@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { phoneLink, whatsappLink } from "@/config";
 import type { Shop } from "@/types";
@@ -9,24 +10,64 @@ export default function Hero({ shop }: { shop: Shop }) {
   const phoneLinkHref = phoneLink(shop.phone);
   const whatsappLinkHref = whatsappLink(shop.whatsapp);
 
+  const images =
+    shop.hero_images && shop.hero_images.length > 0
+      ? shop.hero_images
+      : shop.hero_image_url
+        ? [shop.hero_image_url]
+        : [];
+
+  const [current, setCurrent] = useState(0);
+  const [, setTransitioning] = useState(false);
+
+  const goTo = useCallback(
+    (idx: number) => {
+      if (idx === current) return;
+      setTransitioning(true);
+      setCurrent(idx);
+      setTimeout(() => setTransitioning(false), 700);
+    },
+    [current],
+  );
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % images.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [images.length]);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center scale-105"
-        style={{ backgroundImage: `url('${shop.hero_image_url}')` }}
-      />
+      {/* Background images with crossfade */}
+      {images.map((img, i) => (
+        <div
+          key={i}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url('${img}')`,
+            opacity: i === current ? 1 : 0,
+            transform: i === current ? "scale(1.05)" : "scale(1.1)",
+            transition: "opacity 700ms ease-in-out, transform 6s ease-out",
+          }}
+        />
+      ))}
+
+      {/* Overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
 
       <div
         className="absolute top-20 left-10 w-72 h-72 rounded-full opacity-20 blur-3xl"
-        style={{ background: `var(--color-primary)` }}
+        style={{ background: "var(--color-primary)" }}
       />
       <div
         className="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-10 blur-3xl"
-        style={{ background: `var(--color-primary-light)` }}
+        style={{ background: "var(--color-primary-light)" }}
       />
 
+      {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
         <div className="animate-fade-up inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card-dark mb-8">
           <span className="flex h-2 w-2 relative">
@@ -60,7 +101,15 @@ export default function Hero({ shop }: { shop: Shop }) {
             href={phoneLinkHref}
             className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-lg font-bold shadow-2xl animate-pulse-glow"
           >
-            <svg className="h-5 w-5 relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              className="h-5 w-5 relative z-10"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
             </svg>
             <span className="relative z-10">{t("callNow")}</span>
@@ -78,25 +127,53 @@ export default function Hero({ shop }: { shop: Shop }) {
           </a>
         </div>
 
+        {/* Badges - translated */}
         <div
           className="animate-fade-up mt-14 flex flex-wrap items-center justify-center gap-6 sm:gap-10"
           style={{ animationDelay: "450ms" }}
         >
           {[
-            { icon: "⚡", text: "Express Repairs" },
-            { icon: "🛡️", text: "Warranty Included" },
-            { icon: "⭐", text: "5-Star Rated" },
+            { icon: "\u26A1", label: t("badgeRepairs") },
+            { icon: "\uD83D\uDEE1\uFE0F", label: t("badgeWarranty") },
+            { icon: "\u2B50", label: t("badgeRated") },
           ].map((item) => (
-            <div key={item.text} className="flex items-center gap-2 text-white/60 text-sm">
+            <div
+              key={item.label}
+              className="flex items-center gap-2 text-white/60 text-sm"
+            >
               <span className="text-lg">{item.icon}</span>
-              <span className="font-medium">{item.text}</span>
+              <span className="font-medium">{item.label}</span>
             </div>
           ))}
         </div>
+
+        {/* Image dots indicator */}
+        {images.length > 1 && (
+          <div
+            className="animate-fade-up mt-10 flex items-center justify-center gap-2"
+            style={{ animationDelay: "550ms" }}
+          >
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goTo(i)}
+                className={`transition-all duration-300 rounded-full ${
+                  i === current
+                    ? "w-8 h-2 bg-white"
+                    : "w-2 h-2 bg-white/40 hover:bg-white/60"
+                }`}
+                aria-label={`Image ${i + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
+      {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
-        <span className="text-[10px] text-white/40 uppercase tracking-[0.25em] font-medium">Scroll</span>
+        <span className="text-[10px] text-white/40 uppercase tracking-[0.25em] font-medium">
+          {t("scroll")}
+        </span>
         <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-1.5">
           <div className="w-1.5 h-1.5 rounded-full bg-white/60 animate-bounce" />
         </div>
