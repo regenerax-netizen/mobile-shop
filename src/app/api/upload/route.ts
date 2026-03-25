@@ -26,16 +26,19 @@ export async function POST(req: NextRequest) {
   const buffer = Buffer.from(bytes);
 
   // Determine bucket and path based on folder
-  const isHero = folder === "hero-images";
-  const bucket = isHero ? "shop-images" : "images";
+  const useShopBucket = folder === "hero-images" || folder === "partner-logos";
+  const bucket = useShopBucket ? "shop-images" : "images";
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
   const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
   const path = `${folder}/${filename}`;
 
+  // For SVGs, set the correct content type explicitly
+  const contentType = ext === "svg" ? "image/svg+xml" : file.type;
+
   const { error: uploadError } = await supabaseAdmin.storage
     .from(bucket)
     .upload(path, buffer, {
-      contentType: file.type,
+      contentType,
       upsert: false,
     });
 

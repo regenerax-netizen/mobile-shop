@@ -38,6 +38,13 @@ const partnerBrands: Record<string, { bg: string; text: string; accent: string }
   "Congstar":      { bg: "#FF7300", text: "#fff",  accent: "#ff8f26" },
 };
 
+const serviceTitleKeys: Record<string, string> = {
+  wrench: "item0Title",
+  smartphone: "item1Title",
+  headphones: "item2Title",
+  sim: "item3Title",
+};
+
 const serviceDescKeys: Record<string, string> = {
   wrench: "item0Desc",
   smartphone: "item1Desc",
@@ -88,9 +95,8 @@ export default function Services({ shop }: { shop: Shop }) {
               >
                 {icons[service.icon] ?? icons.smartphone}
               </div>
-              {/* Title from shop data — works for any language */}
               <h3 className="text-lg font-bold text-gray-900 mb-3">
-                {service.title}
+                {t(serviceTitleKeys[service.icon] ?? "item0Title")}
               </h3>
               <p className="text-sm text-gray-500 leading-relaxed">
                 {t(serviceDescKeys[service.icon] ?? "item0Desc")}

@@ -70,10 +70,20 @@ export default function Navbar({
               isDark ? "text-gray-900" : "text-white"
             }`}
           >
-            <span className="accent-gradient">
-              {shop.name.slice(0, -3)}
-            </span>
-            <span>{shop.name.slice(-3)}</span>
+            {(() => {
+              const words = shop.name.split(" ");
+              if (words.length >= 2) {
+                const first = words.slice(0, -1).join(" ");
+                const last = words[words.length - 1];
+                return (
+                  <>
+                    <span className="accent-gradient">{first}</span>{" "}
+                    <span>{last}</span>
+                  </>
+                );
+              }
+              return <span className="accent-gradient">{shop.name}</span>;
+            })()}
           </Link>
 
           {/* Desktop nav */}
