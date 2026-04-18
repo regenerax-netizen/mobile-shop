@@ -6,24 +6,6 @@ export async function POST(request: NextRequest) {
   try {
     const { shopId, password } = await request.json();
 
-    // ── DEBUG ─────────────────────────────────────────────
-    const envRaw = process.env.SHOP_ADMIN_DEFAULT_PASSWORD;
-    // Strip whitespace AND surrounding quotes (common Vercel paste issue: "admin123" → admin123)
-    const correctPassword = (envRaw || "repair2025")
-      .trim()
-      .replace(/^["']|["']$/g, "");
-    console.log("[shop-admin/auth] DEBUG", {
-      envRaw,
-      envLength: envRaw?.length,
-      correctPassword,
-      correctLength: correctPassword.length,
-      receivedPassword: password,
-      receivedLength: password?.length,
-      shopId,
-      match: password?.trim() === correctPassword,
-    });
-    // ─────────────────────────────────────────────────────
-
     if (!shopId || !password) {
       return NextResponse.json(
         { error: "Shop ID and password are required." },
@@ -31,11 +13,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const envRaw = process.env.SHOP_ADMIN_DEFAULT_PASSWORD;
+    // Strip whitespace AND surrounding quotes (common Vercel paste issue: "admin123" → admin123)
+    const correctPassword = (envRaw || "admin123")
+      .trim()
+      .replace(/^["']|["']$/g, "");
+
     if (password.trim() !== correctPassword) {
       return NextResponse.json(
-        {
-          error: `Falsches Passwort. (Erwartet: ${correctPassword.length} Zeichen, Erhalten: ${password.trim().length} Zeichen)`,
-        },
+        { error: "Falsches Passwort." },
         { status: 401 },
       );
     }
