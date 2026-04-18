@@ -66,7 +66,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (!SMTP_USER || !SMTP_PASS) {
-      return NextResponse.json({ success: true, message: "Email not configured." });
+      return NextResponse.json({
+        success: true,
+        message: "Email not configured.",
+      });
     }
 
     const approveUrl = `${BASE_URL}/api/repair-approve/${order.order_number}?token=${order.approval_token}&action=approve`;
@@ -79,7 +82,9 @@ export async function POST(request: NextRequest) {
       auth: { user: SMTP_USER, pass: SMTP_PASS },
     });
 
-    const safeMessage = message ? message.replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
+    const safeMessage = message
+      ? message.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      : "";
 
     const emailHtml = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #f9fafb; padding: 20px;">
@@ -91,10 +96,14 @@ export async function POST(request: NextRequest) {
           <p style="font-size: 16px; color: #111827;">Hallo ${order.customer_name},</p>
           <p style="font-size: 15px; color: #374151;">wir haben Ihr Gerät <strong>${order.device_name}</strong> untersucht und einen Kostenvoranschlag erstellt.</p>
           
-          ${safeMessage ? `<div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0;">
+          ${
+            safeMessage
+              ? `<div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0;">
             <p style="margin: 0; font-size: 14px; color: #92400e;"><strong>Hinweis vom Techniker:</strong></p>
             <p style="margin: 4px 0 0; font-size: 14px; color: #78350f;">${safeMessage}</p>
-          </div>` : ""}
+          </div>`
+              : ""
+          }
 
           <div style="background: #f3f4f6; padding: 20px; border-radius: 12px; margin: 20px 0;">
             <table style="width: 100%; border-collapse: collapse; font-size: 15px;">
@@ -132,6 +141,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Estimate email error:", error);
-    return NextResponse.json({ success: true, message: "Status updated but email failed." });
+    return NextResponse.json({
+      success: true,
+      message: "Status updated but email failed.",
+    });
   }
 }

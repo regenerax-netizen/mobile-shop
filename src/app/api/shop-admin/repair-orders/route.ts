@@ -9,10 +9,20 @@ import { verifyShopAdminToken } from "@/lib/shop-admin-auth";
 import type { RepairOrderStatus } from "@/types";
 
 const VALID_STATUSES: RepairOrderStatus[] = [
-  "pending", "label_sent", "in_transit_to_shop", "received",
-  "diagnosing", "estimate_sent", "approved", "rejected",
-  "in_repair", "repaired", "quality_check",
-  "in_transit_to_customer", "delivered", "cancelled",
+  "pending",
+  "label_sent",
+  "in_transit_to_shop",
+  "received",
+  "diagnosing",
+  "estimate_sent",
+  "approved",
+  "rejected",
+  "in_repair",
+  "repaired",
+  "quality_check",
+  "in_transit_to_customer",
+  "delivered",
+  "cancelled",
 ];
 
 function getShopIdFromCookie(request: NextRequest): string | null {
@@ -35,7 +45,10 @@ export async function GET(request: NextRequest) {
     .order("created_at", { ascending: false });
 
   if (error) {
-    return NextResponse.json({ error: "Failed to fetch orders." }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch orders." },
+      { status: 500 },
+    );
   }
 
   return NextResponse.json({ orders: orders || [] });
@@ -50,7 +63,15 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { orderNumber, status, estimatedCost, finalCost, inboundTracking, outboundTracking, notes } = body;
+    const {
+      orderNumber,
+      status,
+      estimatedCost,
+      finalCost,
+      inboundTracking,
+      outboundTracking,
+      notes,
+    } = body;
 
     if (!orderNumber || !status) {
       return NextResponse.json(
@@ -87,13 +108,11 @@ export async function PATCH(request: NextRequest) {
     const updated = await updateRepairOrderStatus(order.id, status, extra);
 
     if (updated) {
-      await addRepairOrderEvent(
-        order.id,
-        "status_change",
-        oldStatus,
-        status,
-        { updated_by: "shop_admin", shop_id: shopId, ...extra },
-      );
+      await addRepairOrderEvent(order.id, "status_change", oldStatus, status, {
+        updated_by: "shop_admin",
+        shop_id: shopId,
+        ...extra,
+      });
     }
 
     return NextResponse.json({ success: true, order: updated });

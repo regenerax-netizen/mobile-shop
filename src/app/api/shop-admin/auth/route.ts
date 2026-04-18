@@ -39,7 +39,8 @@ export async function POST(request: NextRequest) {
       .eq("shop_id", shopId)
       .single();
 
-    const defaultPassword = process.env.SHOP_ADMIN_DEFAULT_PASSWORD || "repair2025";
+    const defaultPassword =
+      process.env.SHOP_ADMIN_DEFAULT_PASSWORD || "repair2025";
 
     if (creds) {
       const inputHash = crypto
@@ -79,10 +80,7 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch {
-    return NextResponse.json(
-      { error: "An error occurred." },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "An error occurred." }, { status: 500 });
   }
 }
 

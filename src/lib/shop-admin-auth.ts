@@ -11,12 +11,16 @@ import crypto from "crypto";
  * Verification requires no DB lookup — the server-side secret is sufficient.
  */
 
-const getSecret = () => process.env.NEXTAUTH_SECRET || "shop-admin-fallback-secret";
+const getSecret = () =>
+  process.env.NEXTAUTH_SECRET || "shop-admin-fallback-secret";
 
 export function generateShopAdminToken(shopId: string): string {
   const expiry = Date.now() + 24 * 60 * 60 * 1000; // 24 h
   const data = `${shopId}:${expiry}`;
-  const sig = crypto.createHmac("sha256", getSecret()).update(data).digest("hex");
+  const sig = crypto
+    .createHmac("sha256", getSecret())
+    .update(data)
+    .digest("hex");
   return `${data}:${sig}`;
 }
 

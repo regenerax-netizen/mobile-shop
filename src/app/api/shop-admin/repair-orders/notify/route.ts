@@ -60,7 +60,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (!SMTP_USER || !SMTP_PASS) {
-      return NextResponse.json({ success: true, message: "Email not configured, skipping notification." });
+      return NextResponse.json({
+        success: true,
+        message: "Email not configured, skipping notification.",
+      });
     }
 
     const transporter = nodemailer.createTransport({
@@ -126,6 +129,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Notification error:", error);
-    return NextResponse.json({ success: true, message: "Email sending failed but status was updated." });
+    return NextResponse.json({
+      success: true,
+      message: "Email sending failed but status was updated.",
+    });
   }
 }
