@@ -6,6 +6,21 @@ export async function POST(request: NextRequest) {
   try {
     const { shopId, password } = await request.json();
 
+    // ── DEBUG ─────────────────────────────────────────────
+    const envRaw = process.env.SHOP_ADMIN_DEFAULT_PASSWORD;
+    const correctPassword = (envRaw || "repair2025").trim();
+    console.log("[shop-admin/auth] DEBUG", {
+      envRaw,
+      envLength: envRaw?.length,
+      correctPassword,
+      correctLength: correctPassword.length,
+      receivedPassword: password,
+      receivedLength: password?.length,
+      shopId,
+      match: password?.trim() === correctPassword,
+    });
+    // ─────────────────────────────────────────────────────
+
     if (!shopId || !password) {
       return NextResponse.json(
         { error: "Shop ID and password are required." },
@@ -13,14 +28,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Simple password check — one password for all shops (demo-friendly)
-    const correctPassword = (
-      process.env.SHOP_ADMIN_DEFAULT_PASSWORD || "repair2025"
-    ).trim();
-
     if (password.trim() !== correctPassword) {
       return NextResponse.json(
-        { error: "Falsches Passwort." },
+        {
+          error: `Falsches Passwort. (Erwartet: ${correctPassword.length} Zeichen, Erhalten: ${password.trim().length} Zeichen)`,
+        },
         { status: 401 },
       );
     }
@@ -41,6 +53,19 @@ export async function POST(request: NextRequest) {
   } catch {
     return NextResponse.json({ error: "An error occurred." }, { status: 500 });
   }
+}
+
+/* DELETE — Logout: clear the cookie */
+export async function DELETE() {
+  const response = NextResponse.json({ success: true });
+  response.cookies.set("shop_admin_token", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 0,
+    path: "/",
+  });
+  return response;
 }
 
 /* DELETE — Logout: clear the cookie */
