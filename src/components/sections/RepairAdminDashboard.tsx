@@ -190,7 +190,10 @@ export default function RepairAdminDashboard({ shop, slug }: Props) {
         credentials: "include",
       });
       if (res.status === 401) {
-        setAuthenticated(false);
+        // Don't auto-logout — that causes a login loop.
+        // Just show a toast so the user knows to refresh.
+        showToast("Sitzung abgelaufen — bitte Seite neu laden.", "error");
+        setLoading(false);
         return;
       }
       const data = await res.json();
