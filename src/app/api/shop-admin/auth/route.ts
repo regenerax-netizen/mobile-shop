@@ -67,16 +67,3 @@ export async function DELETE() {
   });
   return response;
 }
-
-/* DELETE — Logout: clear the cookie */
-export async function DELETE() {
-  const response = NextResponse.json({ success: true });
-  response.cookies.set("shop_admin_token", "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 0,
-    path: "/",
-  });
-  return response;
-}
