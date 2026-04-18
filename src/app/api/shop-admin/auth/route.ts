@@ -8,7 +8,10 @@ export async function POST(request: NextRequest) {
 
     // ── DEBUG ─────────────────────────────────────────────
     const envRaw = process.env.SHOP_ADMIN_DEFAULT_PASSWORD;
-    const correctPassword = (envRaw || "repair2025").trim();
+    // Strip whitespace AND surrounding quotes (common Vercel paste issue: "admin123" → admin123)
+    const correctPassword = (envRaw || "repair2025")
+      .trim()
+      .replace(/^["']|["']$/g, "");
     console.log("[shop-admin/auth] DEBUG", {
       envRaw,
       envLength: envRaw?.length,
